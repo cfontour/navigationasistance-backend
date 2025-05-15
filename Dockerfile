@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 EXPOSE 10000
 
-CMD ["java", "-Dserver.port=10000", "-jar", "target/ServicioRest-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/ServicioRest-0.0.1-SNAPSHOT.jar"]
