@@ -29,7 +29,11 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(Arrays.asList("https://navigationasistance.ddns.net:8083"));
+        config.setAllowedOriginPatterns(Arrays.asList(
+                "https://navigationasistance.netlify.app",
+                "https://navigationasistance-frontend.vercel.app",
+                "https://navigationasistance.ddns.net:8083"
+        ));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("Authorization");
