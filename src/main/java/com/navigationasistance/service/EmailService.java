@@ -22,7 +22,7 @@ public class EmailService {
             helper.setTo(email.getDestinatario());
             helper.setSubject(email.getAsunto());
             helper.setText(email.getContenidoHtml(), true);
-            helper.setFrom("cargusproductions@gmail.com"); // opcional
+            //helper.setFrom("cargusproductions@gmail.com"); // opcional
 
             mailSender.send(mensaje);
             return 1;
