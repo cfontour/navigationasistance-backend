@@ -1,9 +1,12 @@
 package com.navigationasistance.service;
 
+import com.navigationasistance.modelo.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.*;
 
 @Service
 public class EmailService {
@@ -11,16 +14,21 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void enviarCorreo(String destino, String asunto, String cuerpo) {
+    public int enviarHtml(Email email) {
         try {
-            SimpleMailMessage mensaje = new SimpleMailMessage();
-            mensaje.setTo(destino);
-            mensaje.setSubject(asunto);
-            mensaje.setText(cuerpo);
-            mensaje.setFrom("tuemail@gmail.com"); // opcional si querés forzar el remitente
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setTo(email.getDestinatario());
+            helper.setSubject(email.getAsunto());
+            helper.setText(email.getContenidoHtml(), true);
+            helper.setFrom("cargusproductions@gmail.com"); // opcional
+
             mailSender.send(mensaje);
-        } catch (Exception e) {
-            System.err.println("❌ Error al enviar email a " + destino + ": " + e.getMessage());
+            return 1;
+        } catch (MessagingException e) {
+            System.err.println("❌ Error al enviar email: " + e.getMessage());
+            return 0;
         }
     }
 }
