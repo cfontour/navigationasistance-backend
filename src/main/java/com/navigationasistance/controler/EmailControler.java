@@ -14,8 +14,15 @@ public class EmailControler {
 
     @PostMapping("/enviar")
     public String enviarCorreo(@RequestBody Email email) {
+
+        // LOGS que verás en el panel de Render
+        System.out.println("📧 Ingresó al método /email/enviar");
+        System.out.println("📧 Destinatario: " + email.getDestinatario());
+        System.out.println("📧 Asunto: " + email.getAsunto());
+
         int enviado = emailService.enviarHtml(email);
         if (enviado == 1) {
+            System.out.println("✅ Correo enviado correctamente");
             return "Correo enviado correctamente";
         }
         return "No se pudo enviar el correo";
