@@ -1,4 +1,4 @@
-package com.navigationasistance.interface_;
+package com.navigationasistance.interfaces;
 
 public interface EmailInterface {
     // Sin persistencia, sirve para definir comportamiento si extendemos

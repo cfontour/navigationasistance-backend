@@ -1,14 +1,21 @@
 package com.navigationasistance.modeloDAO;
 
+import java.util.List;
+
 public class EmailDAO {
 
-    private String destinatario;
+    private List<String> destinatario; // ✅
     private String asunto;
     private String contenidoHtml;
 
     // Getters y setters
-    public String getDestinatario() { return destinatario; }
-    public void setDestinatario(String destinatario) { this.destinatario = destinatario; }
+    public List<String> getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(List<String> destinatario) {
+        this.destinatario = destinatario;
+    }
 
     public String getAsunto() { return asunto; }
     public void setAsunto(String asunto) { this.asunto = asunto; }
