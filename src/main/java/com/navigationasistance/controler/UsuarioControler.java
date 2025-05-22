@@ -29,6 +29,18 @@ public class UsuarioControler {
 		}
 	}
 
+	@GetMapping("/listar/{idSolicitante}")
+	public ResponseEntity<?> listarConRol(@PathVariable String idSolicitante) {
+		Usuario solicitante = service.listarId(idSolicitante);
+
+		if (!"ADMINISTRADOR".equalsIgnoreCase(solicitante.getRol())) {
+			return new ResponseEntity<>("Acceso no autorizado", HttpStatus.FORBIDDEN);
+		}
+
+		List<Usuario> lista = service.listar();
+		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
+
 	@GetMapping("/listarId/{id}")
 	public ResponseEntity<Usuario> listarId(@PathVariable String id) {
 		try {
