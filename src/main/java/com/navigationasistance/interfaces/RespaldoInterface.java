@@ -1,4 +1,4 @@
-package com.navigationasistance.interface_;
+package com.navigationasistance.interfaces;
 
 import com.navigationasistance.modelo.Respaldo;
 import org.springframework.data.jpa.repository.JpaRepository;

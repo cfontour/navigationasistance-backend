@@ -1,6 +1,6 @@
 package com.navigationasistance.service;
 
-import com.navigationasistance.interface_.RespaldoInterface;
+import com.navigationasistance.interfaces.RespaldoInterface;
 import com.navigationasistance.mapper.RespaldoMapper;
 import com.navigationasistance.modelo.Respaldo;
 import com.navigationasistance.modeloDAO.RespaldoDAO;
