@@ -53,13 +53,18 @@ public class RespaldoControler {
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizar(@RequestBody Respaldo r, @PathVariable Long id, Model model) {
-        r.setId(id);
-        int res = service.updRespaldo(r);
-        if (res == 0) {
-            return "No se pudo actualizar!";
+    @ResponseBody
+    public String actualizar(@RequestBody Respaldo r, @PathVariable Long id) {
+        Respaldo existente = service.findById(id);
+        if (existente == null) {
+            return "No se encontró el respaldo!";
         }
-        return "Se actualizó con éxito!";
+
+        // Solo actualizamos el campo contacto, el resto se mantiene
+        existente.setContacto(r.getContacto());
+
+        int res = service.updRespaldo(existente);
+        return res == 0 ? "No se pudo actualizar!" : "Se actualizó con éxito!";
     }
 
     @PostMapping("/eliminar/{id}")

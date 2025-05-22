@@ -39,6 +39,10 @@ public class RespaldoService {
         return 0;
     }
 
+    public Respaldo findById(Long id) {
+        return respaldoInterface.findById(id).orElse(null);
+    }
+
     public int delRespaldo(Long id) {
         if (respaldoInterface.existsById(id)) {
             respaldoInterface.deleteById(id);
