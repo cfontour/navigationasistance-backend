@@ -43,16 +43,13 @@ public class RespaldoControler {
     }
 
     @PostMapping("/agregar")
-    public ResponseEntity<String> addRespaldo(@RequestBody Respaldo r) {
-        try {
-            int id = service.addRespaldo(r);
-            if (id == 0) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo registrar");
-            }
-            return ResponseEntity.ok("Se registró con éxito");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar: " + e.getMessage());
+    @ResponseBody
+    public String addRespaldo(@RequestBody Respaldo r) {
+        int id = service.addRespaldo(r);
+        if (id == 0) {
+            return "No se pudo registrar!";
         }
+        return "Se registró con éxito!";
     }
 
     @PostMapping("/actualizar/{id}")
