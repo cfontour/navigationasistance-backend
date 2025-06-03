@@ -20,6 +20,9 @@ public class NadadorPosicion {
 	@Column(name = "fecha_ultima_actualizacion")
 	private LocalDateTime fechaUltimaActualizacion;
 
+	@Column(name = "emergency")
+	private Boolean emergency;
+
 	public NadadorPosicion() {}
 
 	public String getUsuarioid() {
@@ -52,5 +55,13 @@ public class NadadorPosicion {
 
 	public void setFechaUltimaActualizacion(LocalDateTime fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+	}
+
+	public Boolean getEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(Boolean emergency) {
+		this.emergency = emergency;
 	}
 }

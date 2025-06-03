@@ -37,6 +37,20 @@ public class NadadorposicionService implements NadadorposicionInterface {
         return dao.updNadador(n);
     }
 
+    // ✅ Cumple con la interfaz
+    @Override
+    public int updateEmergency(NadadorPosicion n) {
+        return dao.updateEmergency(n);
+    }
+
+    // ✅ Método auxiliar para tu Controller
+    public int updEmergency(String id, boolean emergency) {
+        NadadorPosicion n = new NadadorPosicion();
+        n.setUsuarioid(id);
+        n.setEmergency(emergency);
+        return updateEmergency(n);
+    }
+
     @Override
     public int delNadador(String id) {
         return dao.delNadador(id);

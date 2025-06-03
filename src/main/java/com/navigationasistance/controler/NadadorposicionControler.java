@@ -1,6 +1,7 @@
 package com.navigationasistance.controler;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,32 @@ public class NadadorposicionControler {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/emergency/{id}")
+    public ResponseEntity<?> updateEmergency(@PathVariable String id, @RequestBody Map<String, Boolean> body) {
+        try {
+            if (id == null || id.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("ID inválido");
+            }
+
+            if (!body.containsKey("emergency")) {
+                return ResponseEntity.badRequest().body("Falta el campo 'emergency'");
+            }
+
+            boolean emergency = body.get("emergency");
+            int r = service.updEmergency(id, emergency);
+
+            if (r == 0) {
+                return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("No se actualizó 'emergency'");
+            }
+
+            return ResponseEntity.ok().body("Campo 'emergency' actualizado correctamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno");
         }
     }
 

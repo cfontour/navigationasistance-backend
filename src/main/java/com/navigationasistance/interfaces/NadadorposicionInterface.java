@@ -9,5 +9,6 @@ public interface NadadorposicionInterface {
     //int addNadador(NadadorPosicion n);
     int upsertNadador(NadadorPosicion n);
     int updNadador(NadadorPosicion n);
+    int updateEmergency(NadadorPosicion n);
     int delNadador(String id);
 }
