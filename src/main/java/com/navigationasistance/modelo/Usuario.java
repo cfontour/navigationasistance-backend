@@ -19,6 +19,8 @@ public class Usuario {
 	private String password;
 	@Column(name = "rol")
 	private String rol;
+	@Column
+	private String telefono;
 
 	public Usuario() {
 		// TODO Auto-generated constructor stub
@@ -70,5 +72,13 @@ public class Usuario {
 
 	public void setRol(String rol) {
 		this.rol = rol;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 }
