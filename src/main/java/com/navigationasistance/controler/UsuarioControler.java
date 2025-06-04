@@ -89,7 +89,7 @@ public class UsuarioControler {
 		return "Se actualizó con éxito!";
 	}
 
-	@PostMapping("/eliminar/{id}")
+	@DeleteMapping("/eliminar/{id}")
 	public String delete(@PathVariable String id, Model model) {
 		int r = service.delUsuario(id);
 		if (r == 0) {
