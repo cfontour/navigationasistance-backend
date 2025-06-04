@@ -14,5 +14,8 @@ public interface UsuarioInterface {
 	int addUsuario(Usuario u);
 
 	int updUsuario(Usuario u);
+
+	int cambiarPassword(Usuario u);
+
 	int delUsuario(String id);
 }

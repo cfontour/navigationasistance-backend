@@ -89,6 +89,16 @@ public class UsuarioControler {
 		return "Se actualizó con éxito!";
 	}
 
+	@PostMapping("/cambiarPassword/{id}")
+	public String cambiarPassword(@RequestBody Usuario u, @PathVariable String id, Model model) {
+		u.setId(id);
+		int r = service.cambiarPassword(u);
+		if (r == 0) {
+			return "Error al actualizar contraseña!";
+		}
+		return "Contraseña actualizada";
+	}
+
 	@DeleteMapping("/eliminar/{id}")
 	public String delete(@PathVariable String id, Model model) {
 		int r = service.delUsuario(id);
