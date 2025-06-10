@@ -31,6 +31,8 @@ public class RutasPuntosService {
     }
 
     public int addRutasPuntos(RutasPuntos rp) {
+        System.out.println(">>> DEBUG RP: " + rp);
+        System.out.println(">>> RUTA: " + (rp.getRuta() != null ? rp.getRuta().getId() : "null"));
         return rutasPuntosInterface.save(rp) != null ? 1 : 0;
     }
 
