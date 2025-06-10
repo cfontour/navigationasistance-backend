@@ -1,15 +1,10 @@
 package com.navigationasistance.interfaces;
 
-import com.navigationasistance.modelo.Respaldo;
 import com.navigationasistance.modelo.Rutas;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface RutasInterface extends JpaRepository<Rutas, Integer> {
-    List<Rutas> listar();
-    Rutas listarId(Integer id);
-    int add(Rutas r);
-    int upd(Rutas r);
-    int del(Integer id);
+    // métodos personalizados válidos, si los hay
 }
