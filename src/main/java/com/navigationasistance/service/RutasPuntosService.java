@@ -1,7 +1,9 @@
 package com.navigationasistance.service;
 
+import com.navigationasistance.interfaces.RutasInterface;
 import com.navigationasistance.interfaces.RutasPuntosInterface;
 import com.navigationasistance.mapper.RutasPuntosMapper;
+import com.navigationasistance.modelo.Rutas;
 import com.navigationasistance.modelo.RutasPuntos;
 import com.navigationasistance.modeloDAO.RutasPuntosDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class RutasPuntosService {
     @Autowired
     private RutasPuntosMapper mapper;
 
+    @Autowired
+    private RutasInterface rutasInterface;
+
     public List<RutasPuntos> listar() {
         return rutasPuntosInterface.findAll();
     }
@@ -31,8 +36,14 @@ public class RutasPuntosService {
     }
 
     public int addRutasPuntos(RutasPuntos rp) {
-        System.out.println(">>> DEBUG RP: " + rp);
-        System.out.println(">>> RUTA: " + (rp.getRuta() != null ? rp.getRuta().getId() : "null"));
+        if (rp.getRuta() != null && rp.getRuta().getId() != null) {
+            Rutas ruta = rutasInterface.findById(rp.getRuta().getId())
+                    .orElseThrow(() -> new RuntimeException("Ruta no encontrada con ID: " + rp.getRuta().getId()));
+            rp.setRuta(ruta); // << aquí se asocia la instancia persistida
+        } else {
+            throw new RuntimeException("El campo ruta.id es obligatorio");
+        }
+
         return rutasPuntosInterface.save(rp) != null ? 1 : 0;
     }
 
