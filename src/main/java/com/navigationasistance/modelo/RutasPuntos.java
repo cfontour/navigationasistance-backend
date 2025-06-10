@@ -10,9 +10,8 @@ public class RutasPuntos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "ruta_id", nullable = false)
-    private Rutas ruta;
+    @Column(name = "ruta_id", nullable = false)
+    private Integer rutaId;
 
     @Column(nullable = false)
     private Integer secuencia;
@@ -27,8 +26,13 @@ public class RutasPuntos {
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
-    public Rutas getRuta() { return ruta; }
-    public void setRuta(Rutas ruta) { this.ruta = ruta; }
+    public Integer getRutaId() {
+        return rutaId;
+    }
+
+    public void setRutaId(Integer rutaId) {
+        this.rutaId = rutaId;
+    }
 
     public Integer getSecuencia() { return secuencia; }
     public void setSecuencia(Integer secuencia) { this.secuencia = secuencia; }

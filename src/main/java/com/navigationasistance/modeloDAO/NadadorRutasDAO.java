@@ -1,12 +1,34 @@
 package com.navigationasistance.modeloDAO;
 
-import com.navigationasistance.modelo.NadadorRutas;
-import org.springframework.data.jpa.repository.JpaRepository;
+public class NadadorRutasDAO {
 
-import java.util.Optional;
-import java.util.List;
+    private Integer id;
+    private Integer rutaId;
+    private String usuarioId;
 
-public interface NadadorRutasDAO extends JpaRepository<NadadorRutas, Integer> {
-    Optional<NadadorRutas> findByUsuarioId(String usuarioId);
-    List<NadadorRutas> findByRutaId(Integer rutaId);
+    // Getters y Setters
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getRutaId() {
+        return rutaId;
+    }
+
+    public void setRutaId(Integer rutaId) {
+        this.rutaId = rutaId;
+    }
+
+    public String getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(String usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 }

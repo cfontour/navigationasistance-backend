@@ -1,14 +1,16 @@
 package com.navigationasistance.interfaces;
 
 import com.navigationasistance.modelo.NadadorRutas;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface NadadorRutasInterface {
-    List<NadadorRutas> listar();
-    NadadorRutas listarId(Integer id);
-    NadadorRutas buscarPorUsuario(String usuarioId);
-    List<NadadorRutas> listarPorRuta(Integer rutaId);
-    int add(NadadorRutas nr);
-    int del(Integer id);
+@Repository
+public interface NadadorRutasInterface extends JpaRepository<NadadorRutas, Integer> {
+
+    Optional<NadadorRutas> findByUsuarioId(String usuarioId);
+
+    List<NadadorRutas> findByRutaId(Integer rutaId);
 }

@@ -1,49 +1,56 @@
 package com.navigationasistance.service;
 
 import com.navigationasistance.interfaces.RutasPuntosInterface;
+import com.navigationasistance.mapper.RutasPuntosMapper;
 import com.navigationasistance.modelo.RutasPuntos;
 import com.navigationasistance.modeloDAO.RutasPuntosDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class RutasPuntosService implements RutasPuntosInterface {
+public class RutasPuntosService {
 
     @Autowired
-    RutasPuntosDAO dao;
+    private RutasPuntosInterface rutasPuntosInterface;
 
-    @Override
+    @Autowired
+    private RutasPuntosMapper mapper;
+
     public List<RutasPuntos> listar() {
-        return dao.findAll();
+        return rutasPuntosInterface.findAll();
     }
 
-    @Override
-    public RutasPuntos listarId(Integer id) {
-        return dao.findById(id).orElse(null);
+    public List<RutasPuntosDAO> listarPorRuta(Integer rutaId) {
+        return rutasPuntosInterface.findByRutaIdOrderBySecuenciaAsc(rutaId)
+                .stream()
+                .map(mapper::toDAO)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<RutasPuntos> listarPorRuta(Integer rutaId) {
-        return dao.findByRutaIdOrderBySecuenciaAsc(rutaId);
+    public int addRutasPuntos(RutasPuntos rp) {
+        return rutasPuntosInterface.save(rp) != null ? 1 : 0;
     }
 
-    @Override
-    public int add(RutasPuntos p) {
-        dao.save(p);
-        return 1;
+    public int updRutasPuntos(RutasPuntos rp) {
+        if (rutasPuntosInterface.existsById(rp.getId())) {
+            rutasPuntosInterface.save(rp);
+            return 1;
+        }
+        return 0;
     }
 
-    @Override
-    public int upd(RutasPuntos p) {
-        dao.save(p);
-        return 1;
+    public RutasPuntos findById(Integer id) {
+        return rutasPuntosInterface.findById(id).orElse(null);
     }
 
-    @Override
-    public int del(Integer id) {
-        dao.deleteById(id);
-        return 1;
+    public int delRutasPuntos(Integer id) {
+        if (rutasPuntosInterface.existsById(id)) {
+            rutasPuntosInterface.deleteById(id);
+            return 1;
+        }
+        return 0;
     }
 }

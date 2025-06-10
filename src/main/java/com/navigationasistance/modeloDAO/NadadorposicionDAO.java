@@ -1,6 +1,5 @@
 package com.navigationasistance.modeloDAO;
 
-
 import com.navigationasistance.interfaces.NadadorposicionInterface;
 import com.navigationasistance.mapper.NadadorposicionRowMapper;
 import com.navigationasistance.modelo.NadadorPosicion;

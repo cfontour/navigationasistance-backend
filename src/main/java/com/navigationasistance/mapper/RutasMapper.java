@@ -1,25 +1,23 @@
 package com.navigationasistance.mapper;
 
 import com.navigationasistance.modelo.Rutas;
+import com.navigationasistance.modeloDAO.RutasDAO;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@Component
 public class RutasMapper {
 
-    public static Map<String, Object> toMap(Rutas r) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", r.getId());
-        map.put("color", r.getColor());
-        return map;
+    public RutasDAO toDAO(Rutas r) {
+        RutasDAO dao = new RutasDAO();
+        dao.setId(r.getId());
+        dao.setColor(r.getColor());
+        return dao;
     }
 
-    public static Rutas fromMap(Map<String, Object> map) {
+    public Rutas toModel(RutasDAO dao) {
         Rutas r = new Rutas();
-        if (map.get("id") != null) {
-            r.setId((Integer) map.get("id"));
-        }
-        r.setColor((String) map.get("color"));
+        r.setId(dao.getId());
+        r.setColor(dao.getColor());
         return r;
     }
 }

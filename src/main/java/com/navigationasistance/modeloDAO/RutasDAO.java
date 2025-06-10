@@ -1,8 +1,24 @@
 package com.navigationasistance.modeloDAO;
 
-import com.navigationasistance.modelo.Rutas;
-import org.springframework.data.jpa.repository.JpaRepository;
+public class RutasDAO {
 
-public interface RutasDAO extends JpaRepository<Rutas, Integer> {
-    // Métodos adicionales si los necesitás más adelante
+    private Integer id;
+    private String color;
+
+    // Getters y Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

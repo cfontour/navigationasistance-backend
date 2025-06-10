@@ -1,44 +1,56 @@
 package com.navigationasistance.service;
 
 import com.navigationasistance.interfaces.RutasInterface;
+import com.navigationasistance.mapper.RutasMapper;
 import com.navigationasistance.modelo.Rutas;
 import com.navigationasistance.modeloDAO.RutasDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class RutasService implements RutasInterface {
+public class RutasService {
 
     @Autowired
-    RutasDAO dao;
+    private RutasInterface rutasInterface;
 
-    @Override
+    @Autowired
+    private RutasMapper mapper;
+
     public List<Rutas> listar() {
-        return dao.findAll();
+        return rutasInterface.findAll();
     }
 
-    @Override
     public Rutas listarId(Integer id) {
-        return dao.findById(id).orElse(null);
+        return rutasInterface.findById(id).orElse(null);
     }
 
-    @Override
     public int add(Rutas r) {
-        dao.save(r);
-        return 1;
+        return rutasInterface.save(r) != null ? 1 : 0;
     }
 
-    @Override
     public int upd(Rutas r) {
-        dao.save(r);
-        return 1;
+        if (rutasInterface.existsById(r.getId())) {
+            rutasInterface.save(r);
+            return 1;
+        }
+        return 0;
     }
 
-    @Override
     public int del(Integer id) {
-        dao.deleteById(id);
-        return 1;
+        if (rutasInterface.existsById(id)) {
+            rutasInterface.deleteById(id);
+            return 1;
+        }
+        return 0;
+    }
+
+    public List<RutasDAO> listarDAO() {
+        return rutasInterface.findAll()
+                .stream()
+                .map(mapper::toDAO)
+                .collect(Collectors.toList());
     }
 }

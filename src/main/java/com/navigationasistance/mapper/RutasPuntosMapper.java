@@ -1,32 +1,34 @@
 package com.navigationasistance.mapper;
 
-import com.navigationasistance.modelo.Rutas;
 import com.navigationasistance.modelo.RutasPuntos;
+import com.navigationasistance.modeloDAO.RutasPuntosDAO;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@Component
 public class RutasPuntosMapper {
 
-    public static Map<String, Object> toMap(RutasPuntos p) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", p.getId());
-        map.put("ruta_id", p.getRuta().getId());
-        map.put("secuencia", p.getSecuencia());
-        map.put("latitud", p.getLatitud());
-        map.put("longitud", p.getLongitud());
-        return map;
+    public RutasPuntosDAO toDAO(RutasPuntos rp) {
+        RutasPuntosDAO dao = new RutasPuntosDAO();
+        dao.setId(rp.getId());
+        dao.setRutaId(rp.getRutaId()); // ⚠️ Ojo: sacamos el id desde el objeto Ruta
+        dao.setSecuencia(rp.getSecuencia());
+        dao.setLatitud(rp.getLatitud());
+        dao.setLongitud(rp.getLongitud());
+        return dao;
     }
 
-    public static RutasPuntos fromMap(Map<String, Object> map, Rutas ruta) {
-        RutasPuntos p = new RutasPuntos();
-        if (map.get("id") != null) {
-            p.setId((Integer) map.get("id"));
-        }
-        p.setRuta(ruta);
-        p.setSecuencia((Integer) map.get("secuencia"));
-        p.setLatitud((Double) map.get("latitud"));
-        p.setLongitud((Double) map.get("longitud"));
-        return p;
+    public RutasPuntos toModel(RutasPuntosDAO dao) {
+        RutasPuntos rp = new RutasPuntos();
+        rp.setId(dao.getId());
+        rp.setSecuencia(dao.getSecuencia());
+        rp.setLatitud(dao.getLatitud());
+        rp.setLongitud(dao.getLongitud());
+
+        // Creamos una instancia mínima de Rutas solo con el id
+        com.navigationasistance.modelo.Rutas ruta = new com.navigationasistance.modelo.Rutas();
+        ruta.setId(dao.getRutaId());
+        rp.setRutaId(ruta.getId());
+
+        return rp;
     }
 }

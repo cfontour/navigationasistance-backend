@@ -1,10 +1,51 @@
 package com.navigationasistance.modeloDAO;
 
-import com.navigationasistance.modelo.RutasPuntos;
-import org.springframework.data.jpa.repository.JpaRepository;
+public class RutasPuntosDAO {
 
-import java.util.List;
+    private Integer id;
+    private Integer rutaId; // ⚠️ ESTE CAMPO ES FUNDAMENTAL
+    private Integer secuencia;
+    private Double latitud;
+    private Double longitud;
 
-public interface RutasPuntosDAO extends JpaRepository<RutasPuntos, Integer> {
-    List<RutasPuntos> findByRutaIdOrderBySecuenciaAsc(Integer rutaId);
+    // Getters y Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getRutaId() {
+        return rutaId;
+    }
+
+    public void setRutaId(Integer rutaId) {
+        this.rutaId = rutaId;
+    }
+
+    public Integer getSecuencia() {
+        return secuencia;
+    }
+
+    public void setSecuencia(Integer secuencia) {
+        this.secuencia = secuencia;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
 }
