@@ -31,6 +31,11 @@ public class RutasPuntosControler {
         return rp;
     }
 
+    @PostMapping("/agregar-masivo")
+    public List<RutasPuntos> agregarMasivo(@RequestBody List<RutasPuntos> puntos) {
+        return service.addMultiplesRutasPuntos(puntos);
+    }
+
     @PutMapping("/actualizar")
     public RutasPuntos actualizar(@RequestBody RutasPuntos rp) {
         service.updRutasPuntos(rp);

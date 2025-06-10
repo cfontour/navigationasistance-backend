@@ -1,10 +1,10 @@
 package com.navigationasistance.service;
 
-import com.navigationasistance.interfaces.RutasInterface;
 import com.navigationasistance.interfaces.RutasPuntosInterface;
 import com.navigationasistance.mapper.RutasPuntosMapper;
-import com.navigationasistance.modelo.Rutas;
 import com.navigationasistance.modelo.RutasPuntos;
+import com.navigationasistance.modelo.Rutas;
+import com.navigationasistance.interfaces.RutasInterface;
 import com.navigationasistance.modeloDAO.RutasPuntosDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,12 +39,25 @@ public class RutasPuntosService {
         if (rp.getRuta() != null && rp.getRuta().getId() != null) {
             Rutas ruta = rutasInterface.findById(rp.getRuta().getId())
                     .orElseThrow(() -> new RuntimeException("Ruta no encontrada con ID: " + rp.getRuta().getId()));
-            rp.setRuta(ruta); // << aquí se asocia la instancia persistida
+            rp.setRuta(ruta); // ✅ Asociar la instancia persistida
         } else {
             throw new RuntimeException("El campo ruta.id es obligatorio");
         }
 
         return rutasPuntosInterface.save(rp) != null ? 1 : 0;
+    }
+
+    public List<RutasPuntos> addMultiplesRutasPuntos(List<RutasPuntos> puntos) {
+        for (RutasPuntos rp : puntos) {
+            if (rp.getRuta() != null && rp.getRuta().getId() != null) {
+                Rutas ruta = rutasInterface.findById(rp.getRuta().getId())
+                        .orElseThrow(() -> new RuntimeException("Ruta no encontrada con ID: " + rp.getRuta().getId()));
+                rp.setRuta(ruta);
+            } else {
+                throw new RuntimeException("El campo ruta.id es obligatorio");
+            }
+        }
+        return rutasPuntosInterface.saveAll(puntos);
     }
 
     public int updRutasPuntos(RutasPuntos rp) {
