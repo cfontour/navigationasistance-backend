@@ -1,8 +1,10 @@
 package com.navigationasistance.service;
 
 import com.navigationasistance.interfaces.NadadorRutasInterface;
+import com.navigationasistance.interfaces.RutasInterface;
 import com.navigationasistance.mapper.NadadorRutasMapper;
 import com.navigationasistance.modelo.NadadorRutas;
+import com.navigationasistance.modelo.Rutas;
 import com.navigationasistance.modeloDAO.NadadorRutasDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class NadadorRutasService {
 
     @Autowired
     private NadadorRutasInterface interfaceDAO;
+
+    @Autowired
+    private RutasInterface rutasInterface;  // ⬅️ NECESARIO para cargar la entidad gestionada
 
     @Autowired
     private NadadorRutasMapper mapper;
@@ -36,6 +41,14 @@ public class NadadorRutasService {
     }
 
     public int addNadadorRuta(NadadorRutas nr) {
+        if (nr.getRutaId() == null) {
+            throw new RuntimeException("rutaId no puede ser nulo");
+        }
+
+        if (!rutasInterface.existsById(nr.getRutaId())) {
+            throw new RuntimeException("Ruta no encontrada");
+        }
+
         return interfaceDAO.save(nr) != null ? 1 : 0;
     }
 
