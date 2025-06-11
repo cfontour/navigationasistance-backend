@@ -28,7 +28,8 @@ public class RutasService {
     }
 
     public int add(Rutas r) {
-        return rutasInterface.save(r) != null ? 1 : 0;
+        Rutas guardada = rutasInterface.save(r);
+        return guardada.getId(); // retorna el ID autogenerado
     }
 
     public int upd(Rutas r) {
