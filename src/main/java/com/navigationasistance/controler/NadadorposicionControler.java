@@ -43,6 +43,11 @@ public class NadadorposicionControler {
         }
     }
 
+    @GetMapping("/listarActivosEnCarrera")
+    public List<NadadorPosicion> listarActivosEnCarrera() {
+        return service.listarVinculadosANadadorRutas();
+    }
+
     @PostMapping("/agregar")
     public ResponseEntity<NadadorPosicion> upsert(@RequestBody NadadorPosicion n) {
         try {

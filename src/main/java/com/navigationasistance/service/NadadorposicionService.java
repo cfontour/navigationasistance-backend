@@ -22,10 +22,10 @@ public class NadadorposicionService implements NadadorposicionInterface {
     @Override
     public NadadorPosicion getNadadorPosicion(String id) { return dao.getNadadorPosicion(id); }
 
-    //@Override
-    //public int addNadador(NadadorPosicion n) {
-    //    return dao.addNadador(n);
-    //}
+    @Override
+    public List<NadadorPosicion> listarVinculadosANadadorRutas() {
+        return dao.listarVinculadosANadadorRutas();
+    }
 
     public int upsertNadador(NadadorPosicion n) {
         return dao.upsertNadador(n); // llama al método en el DAO (interface + implementación)

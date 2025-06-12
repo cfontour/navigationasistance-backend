@@ -28,11 +28,12 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
         return template.queryForObject(sql, new Object[]{id}, new NadadorposicionRowMapper());
     }
 
-    //@Override
-    //public int addNadador(NadadorPosicion n) {
-    //    String sql = "INSERT INTO nadadorposicion(usuarioid, nadadorlat, nadadorlng) VALUES (?, ?, ?)";
-    //    return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng());
-    //}
+    @Override
+    public List<NadadorPosicion> listarVinculadosANadadorRutas() {
+        String sql = "SELECT np.* FROM nadadorposicion np " +
+                "JOIN nadadorrutas nr ON np.usuario_id = nr.usuario_id";
+        return template.query(sql, new NadadorposicionRowMapper());
+    }
 
     @Override
     public int upsertNadador(NadadorPosicion n) {

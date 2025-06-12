@@ -6,7 +6,8 @@ import java.util.List;
 public interface NadadorposicionInterface {
     List<NadadorPosicion> listar();
     NadadorPosicion getNadadorPosicion(String id);
-    //int addNadador(NadadorPosicion n);
+    // ✅ NUEVO MÉTODO
+    List<NadadorPosicion> listarVinculadosANadadorRutas();
     int upsertNadador(NadadorPosicion n);
     int updNadador(NadadorPosicion n);
     int updateEmergency(NadadorPosicion n);
