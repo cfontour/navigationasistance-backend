@@ -7,6 +7,7 @@ public class RutasPuntosDAO {
     private Integer secuencia;
     private Double latitud;
     private Double longitud;
+    private String etiqueta;
 
     // Getters y Setters
     public Integer getId() {
@@ -47,5 +48,13 @@ public class RutasPuntosDAO {
 
     public void setLongitud(Double longitud) {
         this.longitud = longitud;
+    }
+
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
     }
 }

@@ -15,6 +15,7 @@ public class RutasPuntosMapper {
         dao.setSecuencia(rp.getSecuencia());
         dao.setLatitud(rp.getLatitud());
         dao.setLongitud(rp.getLongitud());
+        dao.setEtiqueta(rp.getEtiqueta());
         return dao;
     }
 
@@ -24,6 +25,7 @@ public class RutasPuntosMapper {
         rp.setSecuencia(dao.getSecuencia());
         rp.setLatitud(dao.getLatitud());
         rp.setLongitud(dao.getLongitud());
+        rp.setEtiqueta(dao.getEtiqueta());
 
         // Creamos una instancia mínima de Rutas con solo el id
         Rutas ruta = new Rutas();

@@ -11,6 +11,7 @@ public class RutasMapper {
         RutasDAO dao = new RutasDAO();
         dao.setId(r.getId());
         dao.setColor(r.getColor());
+        dao.setNombre(r.getNombre());
         return dao;
     }
 
@@ -18,6 +19,7 @@ public class RutasMapper {
         Rutas r = new Rutas();
         r.setId(dao.getId());
         r.setColor(dao.getColor());
+        r.setNombre(dao.getNombre());
         return r;
     }
 }

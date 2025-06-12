@@ -16,6 +16,9 @@ public class Rutas {
     @Column(nullable = false)
     private String color;
 
+    @Column(nullable = true)
+    private String nombre;
+
     @OneToMany(mappedBy = "ruta", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<RutasPuntos> puntos;
@@ -43,5 +46,13 @@ public class Rutas {
 
     public void setPuntos(List<RutasPuntos> puntos) {
         this.puntos = puntos;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
