@@ -21,7 +21,7 @@ public class UsuariocaPuntosControlService {
             System.out.println("⚠️ Ya existe un registro con ese nadador y punto. Evitando duplicado.");
             return 0;
         } catch (Exception e) {
-            System.err.println("🛑 Error al insertar punto de control: " + e.getMessage());
+            System.err.println("🛑 Error al insertar un punto de control: " + e.getMessage());
             return -1;
         }
     }
