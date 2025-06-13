@@ -46,7 +46,6 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
         return rows;
     }
 
-
     @Override
     public List<UsuariocaPuntosControl> listar() {
         String sql = "SELECT * FROM usuarioca_puntoscontrol";
