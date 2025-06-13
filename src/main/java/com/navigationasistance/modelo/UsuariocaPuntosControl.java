@@ -11,9 +11,8 @@ public class UsuariocaPuntosControl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "nadadorruta_id", nullable = false)
-    private NadadorRutas nadadorruta;
+    @Column(name = "nadadorruta_id", nullable = false)
+    private String nadadorrutaId;
 
     @Column(name = "punto_control", nullable = false)
     private String puntoControl;
@@ -25,8 +24,8 @@ public class UsuariocaPuntosControl {
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
-    public NadadorRutas getNadadorruta() { return nadadorruta; }
-    public void setNadadorruta(NadadorRutas nadadorruta) { this.nadadorruta = nadadorruta; }
+    public String getNadadorrutaId() { return nadadorrutaId; }
+    public void setNadadorrutaId(String nadadorrutaId) { this.nadadorrutaId = nadadorrutaId; }
 
     public String getPuntoControl() { return puntoControl; }
     public void setPuntoControl(String puntoControl) { this.puntoControl = puntoControl; }

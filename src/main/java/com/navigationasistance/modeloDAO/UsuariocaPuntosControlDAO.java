@@ -28,7 +28,7 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
 
         int rows = template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, u.getNadadorruta().getId());
+            ps.setString(1, u.getNadadorrutaId()); // 👈 ahora es String
             ps.setString(2, u.getPuntoControl());
             ps.setTimestamp(3, Timestamp.valueOf(u.getFechaHora()));
             return ps;
@@ -49,7 +49,8 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
 
     @Override
     public List<UsuariocaPuntosControl> listarPorNadadorrutaId(Integer nadadorrutaId) {
+        // Este método probablemente deba cambiarse a String también:
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE nadadorruta_id = ?";
-        return template.query(sql, new Object[]{nadadorrutaId}, new UsuariocaPuntosControlRowMapper());
+        return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());
     }
 }
