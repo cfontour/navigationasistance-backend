@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterface {
@@ -28,18 +29,23 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
 
         int rows = template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, u.getNadadorrutaId()); // 👈 ahora es String
+            ps.setString(1, u.getNadadorrutaId());
             ps.setString(2, u.getPuntoControl());
             ps.setTimestamp(3, Timestamp.valueOf(u.getFechaHora()));
             return ps;
         }, keyHolder);
 
-        if (keyHolder.getKey() != null) {
-            u.setId(keyHolder.getKey().intValue());
+        Map<String, Object> keys = keyHolder.getKeys();
+        if (keys != null && keys.containsKey("id")) {
+            Object id = keys.get("id");
+            if (id instanceof Number) {
+                u.setId(((Number) id).intValue());
+            }
         }
 
         return rows;
     }
+
 
     @Override
     public List<UsuariocaPuntosControl> listar() {
