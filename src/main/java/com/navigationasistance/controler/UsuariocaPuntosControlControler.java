@@ -16,6 +16,10 @@ public class UsuariocaPuntosControlControler {
 
     @PostMapping("/agregar")
     public int agregar(@RequestBody UsuariocaPuntosControl u) {
+        System.out.println("🟡 Recibido en controller:");
+        System.out.println("nadadorrutaId: " + u.getNadadorrutaId());
+        System.out.println("puntoControl: " + u.getPuntoControl());
+        System.out.println("fechaHora: " + u.getFechaHora());
         return service.save(u);
     }
 
