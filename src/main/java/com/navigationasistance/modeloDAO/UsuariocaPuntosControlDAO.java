@@ -23,6 +23,16 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
 
     @Override
     public int save(UsuariocaPuntosControl u) {
+        // Validación: existe ya el punto para este nadadorruta_id?
+        String checkSql = "SELECT COUNT(*) FROM usuarioca_puntoscontrol WHERE nadadorruta_id = ? AND punto_control = ?";
+        Integer count = template.queryForObject(checkSql, new Object[]{u.getNadadorrutaId(), u.getPuntoControl()}, Integer.class);
+
+        if (count != null && count > 0) {
+            System.out.println("⚠️ Ya existe ese punto de control para el nadador. No se insertará.");
+            return 0;
+        }
+
+        // Insertar si no existe
         String sql = "INSERT INTO usuarioca_puntoscontrol (nadadorruta_id, punto_control, fecha_hora) VALUES (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
