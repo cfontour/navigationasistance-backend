@@ -53,6 +53,17 @@ public class NadadorhistoricoRutasControler {
         }
     }
 
+    @GetMapping("/ultimorecorrido/{usuarioId}/{fecha}")
+    public ResponseEntity<List<UUID>> obtenerUlitmoRecorrido(
+            @PathVariable String usuarioId,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        try {
+            List<UUID> recorridos = service.obtenerRecorridosPorFecha(usuarioId, fecha);
+            return ResponseEntity.ok(recorridos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @PostMapping("/agregar")
     public ResponseEntity<?> upsert(@RequestBody NadadorHistoricoRutas r) {

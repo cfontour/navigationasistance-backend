@@ -10,6 +10,7 @@ public interface NadadorHistoricoRutasInterface {
     int insertarRuta(NadadorHistoricoRutas r);
     List<NadadorHistoricoRutas> obtenerPorUsuarioYFecha(String usuarioId, LocalDate fecha);
     List<UUID> obtenerRecorridosPorFecha(String usuarioId, LocalDate fecha);
+    List<UUID> obtenerUltimoRecorrido(String usuarioId, LocalDate fecha);
     List<NadadorHistoricoRutas> listar();
     List<NadadorHistoricoRutas> obtenerPorRecorridoId(UUID recorridoId);
 }

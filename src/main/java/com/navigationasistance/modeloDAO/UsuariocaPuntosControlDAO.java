@@ -68,4 +68,5 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE nadadorruta_id = ?";
         return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());
     }
+
 }
