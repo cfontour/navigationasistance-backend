@@ -38,7 +38,7 @@ public class NadadorhistoricoRutasService implements NadadorHistoricoRutasInterf
 
     @Override
     public List<UUID> obtenerUltimoRecorrido(String usuarioId, LocalDate fecha) {
-        return dao.obtenerRecorridosPorFecha(usuarioId, fecha);
+        return dao.obtenerUltimoRecorrido(usuarioId, fecha);
     }
 
     @Override
