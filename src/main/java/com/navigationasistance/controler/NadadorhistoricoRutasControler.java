@@ -58,8 +58,8 @@ public class NadadorhistoricoRutasControler {
             @PathVariable String usuarioId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         try {
-            List<UUID> recorridos = service.obtenerRecorridosPorFecha(usuarioId, fecha);
-            return ResponseEntity.ok(recorridos);
+            List<UUID> recorrido = service.obtenerUltimoRecorrido(usuarioId, fecha);
+            return ResponseEntity.ok(recorrido);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
