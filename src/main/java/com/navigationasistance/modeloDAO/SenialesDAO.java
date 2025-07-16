@@ -36,14 +36,14 @@ public class SenialesDAO  implements SenialesInterface {
 
     @Override
     public int addSeniales(Seniales s) {
-        String sql = "insert into seniales(id, ruta_id, mts, latl, lngl, latr, lngr, latc, lngc, tipo)values(?,?,?,?,?,?,?,?,?,?)";
-        return template.update(sql, s.getId(), s.getRuta_id(), s.getMts(), s.getLatl(), s.getLngl(), s.getLatr(), s.getLngr(), s.getLatc(), s.getLngc(), s.getTipo());
+        String sql = "insert into seniales(ruta_id, mts, latl, lngl, latr, lngr, latc, lngc, tipo)values(?,?,?,?,?,?,?,?,?)";
+        return template.update(sql, s.getRuta_id(), s.getMts(), s.getLatl(), s.getLngl(), s.getLatr(), s.getLngr(), s.getLatc(), s.getLngc(), s.getTipo());
     }
 
     @Override
     public int updSeniales(Seniales s) {
         String sql="update seniales set ruta_id=?, mts=?, latl=?, lngl=?, latr=?, lngr=?, latc=?, lngc=?, tipo=? where id=?";
-        return template.update(sql, s.getId(), s.getRuta_id(), s.getMts(), s.getLatl(), s.getLngl(), s.getLatr(), s.getLngr(), s.getLatc(), s.getLngc(), s.getTipo(), s.getId());
+        return template.update(sql, s.getRuta_id(), s.getMts(), s.getLatl(), s.getLngl(), s.getLatr(), s.getLngr(), s.getLatc(), s.getLngc(), s.getTipo(), s.getId());
     }
 
     @Override
