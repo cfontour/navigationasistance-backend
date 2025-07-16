@@ -28,11 +28,10 @@ public class SenialesDAO  implements SenialesInterface {
         return template.queryForObject(sql, new Object[]{id}, new SenialesRowMapper());
     }
 
-
     @Override
-    public Seniales getSenialesByRutaId(Integer rutaId) {
+    public List<Seniales> getSenialesByRutaId(Integer rutaId) {
         String sql = "SELECT * FROM seniales WHERE ruta_id = ?";
-        return template.queryForObject(sql, new Object[]{rutaId}, new SenialesRowMapper());
+        return template.query(sql, new Object[]{rutaId}, new SenialesRowMapper());
     }
 
     @Override

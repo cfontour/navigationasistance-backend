@@ -9,7 +9,7 @@ public interface SenialesInterface {
 
     Seniales listarId(Integer id);
 
-    Seniales getSenialesByRutaId(Integer rutaId);
+    List<Seniales> getSenialesByRutaId(Integer rutaId);
 
     int addSeniales(Seniales s);
 

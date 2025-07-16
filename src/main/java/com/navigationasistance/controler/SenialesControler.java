@@ -27,7 +27,7 @@ public class SenialesControler {
     }
 
     @GetMapping("/getSenialesByRutaId/{rutaId}")
-    public Seniales getSenialesByRutaId(@PathVariable("rutaId") Integer rutaId) {
+    public List<Seniales> getSenialesByRutaId(@PathVariable("rutaId") Integer rutaId) {
         return senialesService.getSenialesByRutaId(rutaId);
     }
 

@@ -26,7 +26,7 @@ public class SenialesService implements SenialesInterface {
     }
 
     @Override
-    public Seniales getSenialesByRutaId(Integer rutaId) {
+    public List<Seniales> getSenialesByRutaId(Integer rutaId) {
         return dao.getSenialesByRutaId(rutaId);
     }
 
