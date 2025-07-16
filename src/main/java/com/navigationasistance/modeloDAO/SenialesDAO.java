@@ -1,95 +1,62 @@
 package com.navigationasistance.modeloDAO;
 
-public class SenialesDAO {
+import com.navigationasistance.interfaces.SenialesInterface;
+import com.navigationasistance.mapper.SenialesRowMapper;
+import com.navigationasistance.modelo.Seniales;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-    private Integer Id;
-    private Integer ruta_id;
-    private Integer mts;
-    private Float latl;
-    private Float lngl;
-    private Float latr;
-    private Float lngr;
-    private Float latc;
-    private Float lngc;
-    private String tipo;
+import java.util.List;
 
-    public Integer getId() {
-        return Id;
+@Repository
+public class SenialesDAO  implements SenialesInterface {
+
+    @Autowired
+    JdbcTemplate template;
+
+    @Override
+    public List<Seniales> listar() {
+        String sql = "SELECT * FROM seniales";
+        List<Seniales> list = template.query(sql, new SenialesRowMapper());
+        return list;
     }
 
-    public void setId(Integer id) {
-        Id = id;
+    @Override
+    public Seniales listarId(Integer id) {
+        String sql = "SELECT * FROM seniales WHERE id = ?";
+        return template.queryForObject(sql, new Object[]{id}, new SenialesRowMapper());
     }
 
-    public Integer getRuta_id() {
-        return ruta_id;
+
+    @Override
+    public Seniales getSenialesByRutaId(Integer rutaId) {
+        String sql = "SELECT * FROM seniales WHERE ruta_id = ?";
+        return template.queryForObject(sql, new Object[]{rutaId}, new SenialesRowMapper());
     }
 
-    public void setRuta_id(Integer ruta_id) {
-        this.ruta_id = ruta_id;
+    @Override
+    public int addSeniales(Seniales s) {
+        String sql = "insert into seniales(id, ruta_id, mts, latl, lngl, latr, lngr, latc, lngc, tipo)values(?,?,?,?,?,?,?,?,?,?)";
+        return template.update(sql, s.getId(), s.getRuta_id(), s.getMts(), s.getLatl(), s.getLngl(), s.getLatr(), s.getLngr(), s.getLatc(), s.getLngc(), s.getTipo());
     }
 
-    public Integer getMts() {
-        return mts;
+    @Override
+    public int updSeniales(Seniales s) {
+        String sql="update seniales set ruta_id=?, mts=?, latl=?, lngl=?, latr=?, lngr=?, latc=?, lngc=?, tipo=? where id=?";
+        return template.update(sql, s.getId(), s.getRuta_id(), s.getMts(), s.getLatl(), s.getLngl(), s.getLatr(), s.getLngr(), s.getLatc(), s.getLngc(), s.getTipo(), s.getId());
     }
 
-    public void setMts(Integer mts) {
-        this.mts = mts;
+    @Override
+    public int delSeniales(Integer id) {
+        String sql="delete from seniales where id=?";
+        return template.update(sql,id);
     }
 
-    public Float getLatl() {
-        return latl;
+    @Override
+    public int delSenialesPorRutaId(Integer rutaId) {
+        String sql="delete from seniales where ruta_id=?";
+        return template.update(sql,rutaId);
     }
 
-    public void setLatl(Float latl) {
-        this.latl = latl;
-    }
-
-    public Float getLngl() {
-        return lngl;
-    }
-
-    public void setLngl(Float lngl) {
-        this.lngl = lngl;
-    }
-
-    public Float getLatr() {
-        return latr;
-    }
-
-    public void setLatr(Float latr) {
-        this.latr = latr;
-    }
-
-    public Float getLngr() {
-        return lngr;
-    }
-
-    public void setLngr(Float lngr) {
-        this.lngr = lngr;
-    }
-
-    public Float getLatc() {
-        return latc;
-    }
-
-    public void setLatc(Float latc) {
-        this.latc = latc;
-    }
-
-    public Float getLngc() {
-        return lngc;
-    }
-
-    public void setLngc(Float lngc) {
-        this.lngc = lngc;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 }

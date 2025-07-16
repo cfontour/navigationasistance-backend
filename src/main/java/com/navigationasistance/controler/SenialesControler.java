@@ -26,19 +26,29 @@ public class SenialesControler {
         return senialesService.listarId(id);
     }
 
+    @GetMapping("/getSenialesByRutaId/{rutaId}")
+    public Seniales getSenialesByRutaId(@PathVariable("rutaId") Integer rutaId) {
+        return senialesService.getSenialesByRutaId(rutaId);
+    }
+
     @PostMapping("/agregar")
     public int agregar(@RequestBody Seniales s) {
-        return senialesService.add(s);
+        return senialesService.addSeniales(s);
     }
 
     @PutMapping("/editar")
     public int editar(@RequestBody Seniales s) {
-        return senialesService.upd(s);
+        return senialesService.updSeniales(s);
     }
 
     @DeleteMapping("/eliminar/{id}")
     public int eliminar(@PathVariable("id") Integer id) {
-        return senialesService.del(id);
+        return senialesService.delSeniales(id);
+    }
+
+    @DeleteMapping("/eliminarRutaId/{rutaId}")
+    public int eliminarRutaId(@PathVariable("rutaId") Integer rutaId) {
+        return senialesService.delSenialesPorRutaId(rutaId);
     }
 
 }

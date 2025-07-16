@@ -1,59 +1,53 @@
 package com.navigationasistance.service;
 
 import com.navigationasistance.interfaces.SenialesInterface;
-import com.navigationasistance.mapper.SenialesMapper;
 import com.navigationasistance.modelo.Seniales;
 import com.navigationasistance.modeloDAO.SenialesDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
-public class SenialesService {
+public class SenialesService implements SenialesInterface {
 
     @Autowired
-    private SenialesInterface senialesInterface;
+    SenialesDAO dao;
 
-    @Autowired
-    private SenialesMapper mapper;
-
+    @Override
     public List<Seniales> listar() {
-        return senialesInterface.findAll();
-
+        return dao.listar();
     }
 
+    @Override
     public Seniales listarId(Integer id) {
-        return senialesInterface.findById(id).orElse(null);
+        return dao.listarId(id);
     }
 
-    public int add(Seniales s) {
-        Seniales guardada = senialesInterface.save(s);
-        return guardada.getId(); // retorna el ID autogenerado
+    @Override
+    public Seniales getSenialesByRutaId(Integer rutaId) {
+        return dao.getSenialesByRutaId(rutaId);
     }
 
-    public int upd(Seniales s) {
-        if (senialesInterface.existsById(s.getId())) {
-            senialesInterface.save(s);
-            return 1;
-        }
-        return 0;
+    @Override
+    public int addSeniales(Seniales s) {
+        return dao.addSeniales(s);
     }
 
-    public int del(Integer id) {
-        if (senialesInterface.existsById(id)) {
-            senialesInterface.deleteById(id);
-            return 1;
-        }
-        return 0;
+    @Override
+    public int updSeniales(Seniales s) {
+        return dao.updSeniales(s);
     }
 
-    public List<SenialesDAO> listarDAO() {
-        return senialesInterface.findAll()
-                .stream()
-                .map(mapper::toDAO)
-                .collect(Collectors.toList());
+    @Override
+    public int delSeniales(Integer id) {
+        return dao.delSeniales(id);
+    }
+
+    @Override
+    public int delSenialesPorRutaId(Integer rutaId) {
+        return dao.delSenialesPorRutaId(rutaId);
     }
 }
 

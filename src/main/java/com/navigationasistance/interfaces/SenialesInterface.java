@@ -1,10 +1,21 @@
 package com.navigationasistance.interfaces;
 
 import com.navigationasistance.modelo.Seniales;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface SenialesInterface extends JpaRepository<Seniales, Integer> {
-    // métodos personalizados válidos, si los hay
+import java.util.List;
+
+public interface SenialesInterface {
+    List<Seniales> listar();
+
+    Seniales listarId(Integer id);
+
+    Seniales getSenialesByRutaId(Integer rutaId);
+
+    int addSeniales(Seniales s);
+
+    int updSeniales(Seniales s);
+
+    int delSeniales(Integer id);
+
+    int delSenialesPorRutaId(Integer rutaId);
 }
