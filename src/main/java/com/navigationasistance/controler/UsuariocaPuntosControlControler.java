@@ -40,7 +40,7 @@ public class UsuariocaPuntosControlControler {
         return service.listarPorRutaIdnadadorRutaId(rutaId, nadadorrutaId);
     }
 
-    @GetMapping("/listarPorRutaIdnadadorRutaId/{rutaId}")
+    @GetMapping("/listarPorRutaId/{rutaId}")
     public List<UsuariocaPuntosControl> listarPorRutaId(@PathVariable("rutaId") Integer rutaId) {
         return service.listarPorRutaId(rutaId);
     }
