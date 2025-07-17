@@ -80,9 +80,9 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
 
     @Override
     public List<UsuariocaPuntosControl> listarPorRutaId(Integer rutaId) {
-        // Este método probablemente deba cambiarse a String también:
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE ruta_id = ?";
-        return template.query(sql, new Object[]{String.valueOf(rutaId)}, new UsuariocaPuntosControlRowMapper());
+        // Pass the Integer directly if ruta_id in the DB is an integer
+        return template.query(sql, new Object[]{rutaId}, new UsuariocaPuntosControlRowMapper());
     }
 
 }
