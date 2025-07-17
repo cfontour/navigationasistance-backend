@@ -72,9 +72,17 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
 
     @Override
     public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer rutaId, String nadadorrutaId) {
+        // El orden de los parámetros en new Object[]{} DEBE coincidir con el orden de los '?' en el SQL
+        String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE ruta_id = ? AND nadadorruta_id = ?";
+        // Aquí pasamos rutaId primero (Integer) y luego nadadorrutaId (String)
+        return template.query(sql, new Object[]{rutaId, nadadorrutaId}, new UsuariocaPuntosControlRowMapper());
+    }
+
+    @Override
+    public List<UsuariocaPuntosControl> listarPorRutaId(Integer rutaId) {
         // Este método probablemente deba cambiarse a String también:
-        String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE ruta_id = ? and nadadorruta_id = ?";
-        return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());
+        String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE ruta_id = ?";
+        return template.query(sql, new Object[]{String.valueOf(rutaId)}, new UsuariocaPuntosControlRowMapper());
     }
 
 }

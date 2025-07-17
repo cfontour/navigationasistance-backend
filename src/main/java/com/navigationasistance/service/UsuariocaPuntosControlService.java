@@ -37,4 +37,8 @@ public class UsuariocaPuntosControlService {
     public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer rutaId,String nadadorrutaId) {
         return usuariocaPuntosControlDAO.listarPorNadadorrutaId(nadadorrutaId);
     }
+
+    public List<UsuariocaPuntosControl> listarPorRutaId(Integer rutaId) {
+        return usuariocaPuntosControlDAO.listarPorRutaId(rutaId);
+    }
 }
