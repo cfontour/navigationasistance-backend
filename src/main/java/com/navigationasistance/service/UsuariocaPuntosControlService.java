@@ -30,11 +30,11 @@ public class UsuariocaPuntosControlService {
         return usuariocaPuntosControlDAO.listar();
     }
 
-    public List<UsuariocaPuntosControl> listarPorNadadorrutaId(Integer nadadorrutaId) {
+    public List<UsuariocaPuntosControl> listarPorNadadorrutaId(String nadadorrutaId) {
         return usuariocaPuntosControlDAO.listarPorNadadorrutaId(nadadorrutaId);
     }
 
-    public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer nadadorrutaId) {
+    public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer rutaId,String nadadorrutaId) {
         return usuariocaPuntosControlDAO.listarPorNadadorrutaId(nadadorrutaId);
     }
 }

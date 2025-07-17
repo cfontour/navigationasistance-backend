@@ -64,14 +64,14 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
     }
 
     @Override
-    public List<UsuariocaPuntosControl> listarPorNadadorrutaId(Integer nadadorrutaId) {
+    public List<UsuariocaPuntosControl> listarPorNadadorrutaId(String nadadorrutaId) {
         // Este método probablemente deba cambiarse a String también:
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE nadadorruta_id = ?";
         return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());
     }
 
     @Override
-    public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer nadadorrutaId) {
+    public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer rutaId, String nadadorrutaId) {
         // Este método probablemente deba cambiarse a String también:
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE ruta_id = ? and nadadorruta_id = ?";
         return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());

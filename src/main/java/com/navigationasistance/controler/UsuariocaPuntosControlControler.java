@@ -29,12 +29,12 @@ public class UsuariocaPuntosControlControler {
     }
 
     @GetMapping("/listarPorNadadorrutaId/{id}")
-    public List<UsuariocaPuntosControl> listarPorNadadorrutaId(@PathVariable("id") Integer id) {
+    public List<UsuariocaPuntosControl> listarPorNadadorrutaId(@PathVariable("id") String id) {
         return service.listarPorNadadorrutaId(id);
     }
 
     @GetMapping("/listarPorRutaIdnadadorRutaId/{id}")
-    public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(@PathVariable("id") Integer id) {
-        return service.listarPorNadadorrutaId(id);
+    public List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(@PathVariable("rutaId") Integer rutaId, @PathVariable("id") String id) {
+        return service.listarPorRutaIdnadadorRutaId(rutaId, id);
     }
 }
