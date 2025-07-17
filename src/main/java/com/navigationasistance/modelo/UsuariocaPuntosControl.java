@@ -20,6 +20,9 @@ public class UsuariocaPuntosControl {
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora;
 
+    @Column(name = "ruta_id", nullable = false)
+    private Integer ruta_id;
+
     // Getters y Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -32,4 +35,12 @@ public class UsuariocaPuntosControl {
 
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
+
+    public Integer getRuta_id() {
+        return ruta_id;
+    }
+
+    public void setRuta_id(Integer ruta_id) {
+        this.ruta_id = ruta_id;
+    }
 }

@@ -33,7 +33,7 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
         }
 
         // Insertar si no existe
-        String sql = "INSERT INTO usuarioca_puntoscontrol (nadadorruta_id, punto_control, fecha_hora) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO usuarioca_puntoscontrol (nadadorruta_id, punto_control, fecha_hora, ruta_id) VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -42,6 +42,7 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
             ps.setString(1, u.getNadadorrutaId());
             ps.setString(2, u.getPuntoControl());
             ps.setTimestamp(3, Timestamp.valueOf(u.getFechaHora()));
+            ps.setInt(4, u.getRuta_id());
             return ps;
         }, keyHolder);
 
@@ -66,6 +67,13 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
     public List<UsuariocaPuntosControl> listarPorNadadorrutaId(Integer nadadorrutaId) {
         // Este método probablemente deba cambiarse a String también:
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE nadadorruta_id = ?";
+        return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());
+    }
+
+    @Override
+    public List<UsuariocaPuntosControl> listarPorRutaId_nadadorRutaId(Integer nadadorrutaId) {
+        // Este método probablemente deba cambiarse a String también:
+        String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE ruta_id = ? and nadadorruta_id = ?";
         return template.query(sql, new Object[]{String.valueOf(nadadorrutaId)}, new UsuariocaPuntosControlRowMapper());
     }
 
