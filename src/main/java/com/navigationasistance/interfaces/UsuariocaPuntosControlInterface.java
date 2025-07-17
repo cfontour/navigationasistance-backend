@@ -12,5 +12,5 @@ public interface UsuariocaPuntosControlInterface {
 
     List<UsuariocaPuntosControl> listarPorNadadorrutaId(Integer nadadorrutaId);
 
-    List<UsuariocaPuntosControl> listarPorRutaId_nadadorRutaId(Integer nadadorrutaId);
+    List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer nadadorrutaId);
 }
