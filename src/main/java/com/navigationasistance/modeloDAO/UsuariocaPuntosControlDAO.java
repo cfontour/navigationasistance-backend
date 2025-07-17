@@ -42,7 +42,7 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
             ps.setString(1, u.getNadadorrutaId());
             ps.setString(2, u.getPuntoControl());
             ps.setTimestamp(3, Timestamp.valueOf(u.getFechaHora()));
-            ps.setInt(4, u.getRuta_id());
+            ps.setInt(4, u.getRutaId());
             return ps;
         }, keyHolder);
 

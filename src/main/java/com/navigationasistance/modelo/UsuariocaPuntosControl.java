@@ -21,7 +21,7 @@ public class UsuariocaPuntosControl {
     private LocalDateTime fechaHora;
 
     @Column(name = "ruta_id", nullable = false)
-    private Integer ruta_id;
+    private Integer rutaId;
 
     // Getters y Setters
     public Integer getId() { return id; }
@@ -36,11 +36,12 @@ public class UsuariocaPuntosControl {
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
 
-    public Integer getRuta_id() {
-        return ruta_id;
+    public Integer getRutaId() { // <-- CAMBIO AQUÍ: getter a camelCase
+        return rutaId;
     }
 
-    public void setRuta_id(Integer ruta_id) {
-        this.ruta_id = ruta_id;
+    public void setRutaId(Integer rutaId) { // <-- CAMBIO AQUÍ: setter a camelCase
+        this.rutaId = rutaId;
     }
+
 }
