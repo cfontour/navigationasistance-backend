@@ -20,6 +20,8 @@ public class UsuariocaPuntosControlControler {
         System.out.println("nadadorrutaId: " + u.getNadadorrutaId());
         System.out.println("puntoControl: " + u.getPuntoControl());
         System.out.println("fechaHora: " + u.getFechaHora());
+        // CORREGIDO: Manejar posible null antes de llamar a toString()
+        System.out.println("Ruta_id: " + (u.getRutaId() != null ? u.getRutaId().toString() : "null"));
         return service.save(u);
     }
 
