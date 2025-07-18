@@ -75,8 +75,9 @@ public class NadadorHistoricoRutasDAO implements NadadorHistoricoRutasInterface 
 
     @Override
     public List<UUID> obtenerUltimoRecorrido(String usuarioId, LocalDate fecha) {
-        String sql = "SELECT recorrido_id FROM public.nadadorhistoricorutas WHERE usuario_id = ? AND nadadorfecha = ? " +
-                "ORDER BY nadadorfecha DESC " +
+        String sql = "SELECT recorrido_id FROM public.nadadorhistoricorutas " +
+                "WHERE usuario_id = ? AND nadadorfecha = ? " +
+                "ORDER BY ultima_actualizacion_ts DESC " + // <-- ¡CAMBIO CLAVE AQUÍ!
                 "LIMIT 1;";
         return template.query(sql, new Object[]{usuarioId, fecha},
                 (rs, rowNum) -> UUID.fromString(rs.getString("recorrido_id")));
