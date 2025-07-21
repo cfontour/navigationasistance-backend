@@ -37,19 +37,20 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
 
     @Override
     public int upsertNadador(NadadorPosicion n) {
-        String sql = "INSERT INTO nadadorposicion (usuario_id, nadadorlat, nadadorlng) " +
-                "VALUES (?, ?, ?) " +
+        String sql = "INSERT INTO nadadorposicion (usuario_id, nadadorlat, nadadorlng, bearing) " +
+                "VALUES (?, ?, ?, ?) " +
                 "ON CONFLICT (usuario_id) DO UPDATE SET " +
                 "nadadorlat = EXCLUDED.nadadorlat, " +
                 "nadadorlng = EXCLUDED.nadadorlng, " +
+                "bearing = EXCLUDED.bearing, " + // ✅ Añade esto para actualizar el bearing
                 "fecha_ultima_actualizacion = now()";
-        return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng());
+        return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng(), n.getBearing());
     }
 
 
     @Override
     public int updNadador(NadadorPosicion n) {
-        String sql="UPDATE nadadorposicion SET nadadorlat=?, nadadorlng=? WHERE usuario_id=?";
+        String sql="UPDATE nadadorposicion SET nadadorlat=?, nadadorlng=?, bearing=? WHERE usuario_id=?";
         return template.update(sql, n.getNadadorlat(), n.getNadadorlng(), n.getUsuarioid());
     }
 

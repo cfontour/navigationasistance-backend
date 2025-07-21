@@ -23,6 +23,9 @@ public class NadadorPosicion {
 	@Column(name = "emergency")
 	private Boolean emergency;
 
+	@Column(name = "bearing")
+	private Integer bearing;
+
 	public NadadorPosicion() {}
 
 	public String getUsuarioid() {
@@ -63,5 +66,13 @@ public class NadadorPosicion {
 
 	public void setEmergency(Boolean emergency) {
 		this.emergency = emergency;
+	}
+
+	public Integer getBearing() {
+		return bearing;
+	}
+
+	public void setBearing(Integer bearing) {
+		this.bearing = bearing;
 	}
 }
