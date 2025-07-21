@@ -4,6 +4,7 @@ import com.navigationasistance.interfaces.NadadorposicionInterface;
 import com.navigationasistance.mapper.NadadorposicionRowMapper;
 import com.navigationasistance.modelo.NadadorPosicion;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +26,14 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
     @Override
     public NadadorPosicion getNadadorPosicion(String id) {
         String sql = "SELECT * FROM nadadorposicion WHERE usuario_id = ?";
-        return template.queryForObject(sql, new Object[]{id}, new NadadorposicionRowMapper());
+        try {
+            // ✅ ESTA LÍNEA DEBE IR DENTRO DE UN BLOQUE try-catch para EmptyResultDataAccessException
+            return template.queryForObject(sql, new Object[]{id}, new NadadorposicionRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            // ✅ Si no se encuentra ningún resultado, retorna null.
+            // Esto le permite al controlador manejar el 404 correctamente.
+            return null;
+        }
     }
 
     @Override
