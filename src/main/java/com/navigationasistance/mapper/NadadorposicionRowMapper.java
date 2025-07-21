@@ -14,21 +14,24 @@ public class NadadorposicionRowMapper implements RowMapper<NadadorPosicion> {
         nadadorPosicion.setUsuarioid(rs.getString("usuario_id"));
         nadadorPosicion.setNadadorlat(rs.getString("nadadorlat"));
         nadadorPosicion.setNadadorlng(rs.getString("nadadorlng"));
-        // ✅ CORRECCIÓN para BEARING: Usar getObject para mapear NULL de DB a null en Java
-        // Si el valor en la DB es NULL, esto asignará 'null' al Integer de Java.
-        nadadorPosicion.setBearing(rs.getObject("bearing", Integer.class));
 
-        // ✅ CORRECCIÓN para EMERGENCY: Usar getObject para mapear NULL de DB a null en Java
-        // Si el valor en la DB es NULL, esto asignará 'null' al Boolean de Java.
-        nadadorPosicion.setEmergency(rs.getObject("emergency", Boolean.class));
+        // Inicializa bearing a 0 si es nulo en la DB
+        int valorBearing = rs.getInt("bearing");
+        if (rs.wasNull()) {
+            nadadorPosicion.setBearing(0); // Si el valor en DB es NULL, lo establece en 0
+        } else {
+            nadadorPosicion.setBearing(valorBearing); // Si no es nulo, establece el valor real
+        }
+
+        nadadorPosicion.setEmergency(rs.getBoolean("emergency"));
 
         Timestamp ts = rs.getTimestamp("fecha_ultima_actualizacion");
         if (ts != null) {
             nadadorPosicion.setFechaUltimaActualizacion(ts.toLocalDateTime());
         }
 
-        //boolean emergency = rs.getBoolean("emergency");
-        //nadadorPosicion.setEmergency(!rs.wasNull() ? emergency : null);
+        boolean emergency = rs.getBoolean("emergency");
+        nadadorPosicion.setEmergency(!rs.wasNull() ? emergency : null);
 
         return nadadorPosicion;
     }
