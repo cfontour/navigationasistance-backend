@@ -14,15 +14,7 @@ public class NadadorposicionRowMapper implements RowMapper<NadadorPosicion> {
         nadadorPosicion.setUsuarioid(rs.getString("usuario_id"));
         nadadorPosicion.setNadadorlat(rs.getString("nadadorlat"));
         nadadorPosicion.setNadadorlng(rs.getString("nadadorlng"));
-
-        // Inicializa bearing a 0 si es nulo en la DB
-        int valorBearing = rs.getInt("bearing");
-        if (rs.wasNull()) {
-            nadadorPosicion.setBearing(0); // Si el valor en DB es NULL, lo establece en 0
-        } else {
-            nadadorPosicion.setBearing(valorBearing); // Si no es nulo, establece el valor real
-        }
-
+        nadadorPosicion.setBearing(rs.getInt("bearing"));
         nadadorPosicion.setEmergency(rs.getBoolean("emergency"));
 
         Timestamp ts = rs.getTimestamp("fecha_ultima_actualizacion");
