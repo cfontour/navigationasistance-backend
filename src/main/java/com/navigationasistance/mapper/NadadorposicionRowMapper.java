@@ -27,8 +27,8 @@ public class NadadorposicionRowMapper implements RowMapper<NadadorPosicion> {
             nadadorPosicion.setFechaUltimaActualizacion(ts.toLocalDateTime());
         }
 
-        boolean emergency = rs.getBoolean("emergency");
-        nadadorPosicion.setEmergency(!rs.wasNull() ? emergency : null);
+        //boolean emergency = rs.getBoolean("emergency");
+        //nadadorPosicion.setEmergency(!rs.wasNull() ? emergency : null);
 
         return nadadorPosicion;
     }
