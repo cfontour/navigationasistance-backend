@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RutaRepository extends JpaRepository<Rutas, Long> {
+public interface RutaRepository extends JpaRepository<Rutas, Integer> {
 
     // Método para obtener todas las rutas, proyectando a RutaSimpleDTO
     // Asegúrate de que los nombres de los parámetros del constructor RutaSimpleDTO
