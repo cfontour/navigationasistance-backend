@@ -1,8 +1,10 @@
 package com.navigationasistance.controler;
 
 import com.navigationasistance.modelo.Rutas;
+import com.navigationasistance.modeloDAO.RutaSimpleDTO;
 import com.navigationasistance.service.RutasService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,13 @@ public class RutasControler {
     @GetMapping("/listarId/{id}")
     public Rutas listarId(@PathVariable("id") Integer id) {
         return rutasService.listarId(id);
+    }
+
+    // NUEVO ENDPOINT para el selector de rutas simples
+    @GetMapping("/listarSimples") // La URL final será: /rutasa/listarSimples (o /rutas/listarSimples)
+    public ResponseEntity<List<RutaSimpleDTO>> listarRutasSimples() {
+        List<RutaSimpleDTO> rutasSimples = rutasService.listarTodasRutasSimples();
+        return ResponseEntity.ok(rutasSimples);
     }
 
     @PostMapping("/agregar")

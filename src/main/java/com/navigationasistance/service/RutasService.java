@@ -1,8 +1,10 @@
 package com.navigationasistance.service;
 
 import com.navigationasistance.interfaces.RutasInterface;
+import com.navigationasistance.interfaces.RutasaInterface;
 import com.navigationasistance.mapper.RutasMapper;
 import com.navigationasistance.modelo.Rutas;
+import com.navigationasistance.modeloDAO.RutaSimpleDTO;
 import com.navigationasistance.modeloDAO.RutasDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,11 @@ public class RutasService {
 
     public Rutas listarId(Integer id) {
         return rutasInterface.findById(id).orElse(null);
+    }
+
+    // NUEVO MÉTODO para listar las rutas simples (que devuelve el DTO)
+    public List<RutaSimpleDTO> listarTodasRutasSimples() {
+        return RutasInterface.findAllSimpleRoutes();
     }
 
     public int add(Rutas r) {
