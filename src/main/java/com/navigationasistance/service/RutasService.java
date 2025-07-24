@@ -29,9 +29,9 @@ public class RutasService {
         return rutasInterface.findById(id).orElse(null);
     }
 
-    // NUEVO MÉTODO para listar las rutas simples (que devuelve el DTO)
+    // MÉTODO CORREGIDO para listar las rutas simples (que devuelve el DTO)
     public List<RutaSimpleDTO> listarTodasRutasSimples() {
-        return RutasInterface.findAllSimpleRoutes();
+        return rutasInterface.findAllSimpleRoutes(); // <<<<<< ¡¡¡LA LLAMADA CORRECTA ES ASÍ!!!
     }
 
     public int add(Rutas r) {
