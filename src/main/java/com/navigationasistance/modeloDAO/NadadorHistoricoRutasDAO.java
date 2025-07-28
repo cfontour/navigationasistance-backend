@@ -81,7 +81,7 @@ public class NadadorHistoricoRutasDAO implements NadadorHistoricoRutasInterface 
         //        "LIMIT 1;";
         String sql = "SELECT recorrido_id FROM public.nadadorhistoricorutas " +
                 "WHERE usuario_id = ? AND nadadorfecha = ? " +
-                "ORDER BY nadadorfecha DESC" +
+                "ORDER BY nadadorfecha DESC " +
                 "LIMIT 1;";
         return template.query(sql, new Object[]{usuarioId, fecha},
                 (rs, rowNum) -> UUID.fromString(rs.getString("recorrido_id")));
