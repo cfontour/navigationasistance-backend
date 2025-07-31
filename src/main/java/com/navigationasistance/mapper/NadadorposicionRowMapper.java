@@ -17,10 +17,9 @@ public class NadadorposicionRowMapper implements RowMapper<NadadorPosicion> {
         nadadorPosicion.setBearing(rs.getInt("bearing"));
         nadadorPosicion.setEmergency(rs.getBoolean("emergency"));
 
+        // ✅ CAMBIAR: Usar Timestamp directamente, sin convertir a LocalDateTime
         Timestamp ts = rs.getTimestamp("fecha_ultima_actualizacion");
-        if (ts != null) {
-            nadadorPosicion.setFechaUltimaActualizacion(ts.toLocalDateTime());
-        }
+        nadadorPosicion.setFechaUltimaActualizacion(ts); // Sin .toLocalDateTime()
 
         boolean emergency = rs.getBoolean("emergency");
         nadadorPosicion.setEmergency(!rs.wasNull() ? emergency : null);
