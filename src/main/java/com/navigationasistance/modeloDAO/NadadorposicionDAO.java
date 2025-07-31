@@ -52,7 +52,7 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
                 "nadadorlng = EXCLUDED.nadadorlng, " +
                 "bearing = EXCLUDED.bearing, " + // ✅ Añade esto para actualizar el bearing
                 "fecha_ultima_actualizacion = now()";
-        return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng(), n.getBearing());
+        return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng(), n.getBearing(), n.getFechaUltimaActualizacion());
     }
 
 
