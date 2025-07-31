@@ -50,6 +50,10 @@ public class NadadorposicionControler {
 
     @PostMapping("/agregar")
     public ResponseEntity<NadadorPosicion> upsert(@RequestBody NadadorPosicion n) {
+        System.out.println("=== DEBUG CONTROLLER ===");
+        System.out.println("FECHA RECIBIDA: " + n.getFechaUltimaActualizacion());
+        System.out.println("TIPO: " + (n.getFechaUltimaActualizacion() != null ? n.getFechaUltimaActualizacion().getClass() : "null"));
+        System.out.println("========================");
         try {
             if (n == null || n.getUsuarioid() == null || n.getNadadorlat() == null || n.getNadadorlng() == null) {
                 return ResponseEntity.badRequest().build();
