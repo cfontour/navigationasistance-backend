@@ -1,7 +1,7 @@
 package com.navigationasistance.modelo;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "nadadorposicion")
@@ -18,7 +18,7 @@ public class NadadorPosicion {
 	private String nadadorlng;
 
 	@Column(name = "fecha_ultima_actualizacion")
-	private Timestamp fechaUltimaActualizacion;
+	private LocalDateTime fechaUltimaActualizacion;
 
 	@Column(name = "emergency")
 	private Boolean emergency;
@@ -52,11 +52,11 @@ public class NadadorPosicion {
 		this.nadadorlng = nadadorlng;
 	}
 
-	public Timestamp getFechaUltimaActualizacion() {
+	public LocalDateTime getFechaUltimaActualizacion() {
 		return fechaUltimaActualizacion;
 	}
 
-	public void setFechaUltimaActualizacion(Timestamp fechaUltimaActualizacion) {
+	public void setFechaUltimaActualizacion(LocalDateTime fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
 	}
 
