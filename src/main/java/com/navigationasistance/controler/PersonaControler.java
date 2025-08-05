@@ -1,19 +1,14 @@
 package com.navigationasistance.controler;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.navigationasistance.modelo.Persona;
 import com.navigationasistance.service.PersonaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/personas")
@@ -21,19 +16,34 @@ public class PersonaControler {
 	
 	@Autowired
 	private PersonaService service;
-	
+
 	@GetMapping("/listar")
-	public List<Map<String, Object>> listar() {
-		List<Map<String, Object>> lista = service.listar();
-		return lista;
+	public ResponseEntity<List<Persona>> listar() {
+		try {
+			List<Persona> lista = service.listar();
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-//	public List<Map<String, Object>> listar(Model model) {
-//		return service.listar();
-//	}
-		
+
+	@GetMapping("/listarId/{id}")
+	public ResponseEntity<Persona> listarId(@PathVariable String id) {
+		try {
+			Persona persona = service.listarId(id);
+			if (persona != null) {
+				return new ResponseEntity<>(persona, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PostMapping("/agregar")
 	public String addPersona(@RequestBody Persona p,Model model) { //save(@RequestBody Persona p,Model model)
-		int id=service.add(p);
+		int id=service.addPersona(p);
 		if(id==0) {
 			return "No se pudo Regsitrar!";
 		}
@@ -41,17 +51,17 @@ public class PersonaControler {
 	}
 	
 	@PostMapping("/actualizar/{id}")
-	public String save(@RequestBody Persona p,@PathVariable int id,Model model) {
+	public String save(@RequestBody Persona p,@PathVariable String id,Model model) {
 		p.setId(id);
-		int r=service.edit(p);
+		int r=service.updPersona(p);
 		if(r==0) {
 			return "No se pudo Actualizar!";
 		}
 		return "Se actualizó con éxito!";
 	}
 	@PostMapping("/eliminar/{id}")
-	public String delete(@PathVariable int id,Model model) {
-		int r=service.delete(id);
+	public String delete(@PathVariable String id,Model model) {
+		int r=service.delPersona(id);
 		if(r==0) {
 			return "Registro No Eliminado!";
 		}

@@ -13,38 +13,36 @@ public class Persona {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private int id;
+	private String id;
 	@Column
-	private String nombres;
+	private String nombre;
 	@Column
-	private String apellidos;
+	private String apellido;
 	
 	public Persona() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(String id) {this.id = id;	}
+
+	public String getNombre() {
+		return nombre;
 	}
 
-	public String getNombres() {
-		return nombres;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
+	public String getApellido() {
+		return apellido;
 	}
 
-	public String getApellidos() {
-		return apellidos;
-	}
-
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
 	}
 	
 }
