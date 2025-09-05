@@ -20,6 +20,8 @@ public class NadadorposicionRowMapper implements RowMapper<NadadorPosicion> {
         Timestamp ts = rs.getTimestamp("fecha_ultima_actualizacion");
         if (ts != null) {
             nadadorPosicion.setFechaUltimaActualizacion(ts.toLocalDateTime());
+        } else {
+            nadadorPosicion.setFechaUltimaActualizacion(null); // Explícitamente setear null
         }
 
         boolean emergency = rs.getBoolean("emergency");
