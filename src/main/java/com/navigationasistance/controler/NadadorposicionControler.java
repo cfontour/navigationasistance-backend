@@ -141,4 +141,75 @@ public class NadadorposicionControler {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping("/webhook-ttn")
+    public ResponseEntity<?> procesarWebhookTTN(@RequestBody Map<String, Object> ttnPayload) {
+        try {
+            // Log para debug
+            System.out.println("=== DEBUG WEBHOOK TTN ===");
+            System.out.println("Payload recibido: " + ttnPayload.toString());
+
+            // Extraer datos del payload TTN
+            Map<String, Object> uplinkMessage = (Map<String, Object>) ttnPayload.get("uplink_message");
+            if (uplinkMessage == null) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "Sin uplink_message"));
+            }
+
+            Map<String, Object> decodedPayload = (Map<String, Object>) uplinkMessage.get("decoded_payload");
+            if (decodedPayload == null) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "Sin decoded_payload"));
+            }
+
+            // Verificar que sea frame GPS (frame_id = 6)
+            Integer frameId = (Integer) decodedPayload.get("frame_id");
+            if (frameId == null || frameId != 6) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "Frame sin GPS: " + frameId));
+            }
+
+            // Extraer coordenadas como Double y convertir a String
+            Double latitude = (Double) decodedPayload.get("lat");
+            Double longitude = (Double) decodedPayload.get("lon");
+
+            if (latitude == null || longitude == null || latitude == 0.0 || longitude == 0.0) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "Coordenadas inválidas"));
+            }
+
+            // Convertir a String
+            String latString = String.valueOf(latitude);
+            String lngString = String.valueOf(longitude);
+
+            // Extraer device ID
+            Map<String, Object> endDeviceIds = (Map<String, Object>) ttnPayload.get("end_device_ids");
+            String deviceId = (String) endDeviceIds.get("device_id");
+
+            // Crear NadadorPosicion usando tu estructura
+            NadadorPosicion nadadorPosicion = new NadadorPosicion();
+            nadadorPosicion.setUsuarioid(deviceId); // device_id como usuarioid
+            nadadorPosicion.setNadadorlat(latString);  // String
+            nadadorPosicion.setNadadorlng(lngString);  // String
+            // nadadorPosicion.setFechaUltimaActualizacion se setea automáticamente
+
+            // Usar tu service existente con upsert
+            int resultado = service.upsertNadador(nadadorPosicion);
+
+            System.out.println("Resultado upsert: " + resultado);
+            System.out.println("========================");
+
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Posición procesada",
+                    "resultado", resultado,
+                    "deviceId", deviceId,
+                    "lat", latString,
+                    "lng", lngString
+            ));
+
+        } catch (Exception e) {
+            System.err.println("Error procesando webhook TTN: " + e.getMessage());
+            e.printStackTrace();
+            // IMPORTANTE: Siempre devolver 200 a TTN
+            return ResponseEntity.ok(Map.of("success", false, "error", e.getMessage()));
+        }
+    }
+
 }
