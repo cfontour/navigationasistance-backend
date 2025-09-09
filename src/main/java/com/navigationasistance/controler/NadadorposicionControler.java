@@ -177,9 +177,17 @@ public class NadadorposicionControler {
                 return ResponseEntity.ok(Map.of("success", true, "message", "Frame sin GPS: " + frameId));
             }
 
-            // Extraer coordenadas como Double y convertir a String
-            Double latitude = (Double) decodedPayload.get("lat");
-            Double longitude = (Double) decodedPayload.get("lon");
+            // Extraer coordenadas de locations
+            Double latitude = null;
+            Double longitude = null;
+            Map<String, Object> locations = (Map<String, Object>) uplinkMessage.get("locations");
+            if (locations != null) {
+                Map<String, Object> frmPayload = (Map<String, Object>) locations.get("frm-payload");
+                if (frmPayload != null) {
+                    latitude = (Double) frmPayload.get("latitude");
+                    longitude = (Double) frmPayload.get("longitude");
+                }
+            }
 
             if (latitude == null || longitude == null || latitude == 0.0 || longitude == 0.0) {
                 return ResponseEntity.ok(Map.of("success", true, "message", "Coordenadas inválidas"));
