@@ -182,37 +182,23 @@ public class NadadorposicionControler {
             Integer bearing = (Integer) decodedPayload.get("bearing");
             Boolean emergency = (Boolean) decodedPayload.get("emergency");
 
-            System.out.println("Frame ID: " + frameId);
-            System.out.println("Emergency: " + emergency);
-            System.out.println("Bearing: " + bearing);
+            // SI HAY EMERGENCIA, procesar SIEMPRE (con o sin GPS)
+            if (emergency != null && emergency) {
+                int resultadoEmergency = service.updEmergency(deviceId, true);
 
-            // PROCESAR EMERGENCIA - Siempre actualizar el estado
-            if (emergency != null) {
-                int resultadoEmergency = service.updEmergency(deviceId, emergency);
-                System.out.println("Estado emergencia actualizado: " + emergency + ", resultado: " + resultadoEmergency);
-
-                // Si es Frame 5 (solo emergencia), retornar aquí
-                if (frameId != null && frameId == 5) {
-                    Map<String, Object> response = new HashMap<>();
-                    response.put("success", true);
-                    response.put("message", emergency ? "EMERGENCIA ACTIVADA" : "EMERGENCIA DESACTIVADA");
-                    response.put("emergency", emergency);
-                    response.put("deviceId", deviceId);
-                    response.put("resultado", resultadoEmergency);
-                    response.put("frame_id", frameId);
-
-                    return ResponseEntity.ok(response);
-                }
-            }
-
-            // Si NO hay GPS (frame diferente a 6), retornar
-            if (frameId == null || frameId != 6) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", true);
-                response.put("message", "Frame sin GPS: " + frameId);
-                response.put("emergency", emergency != null ? emergency : false);
-                response.put("frame_id", frameId);
+                response.put("message", "EMERGENCIA PROCESADA");
+                response.put("emergency", true);
+                response.put("deviceId", deviceId);
+                response.put("resultado", resultadoEmergency);
+
                 return ResponseEntity.ok(response);
+            }
+
+            // Si NO hay emergencia, solo procesar si hay GPS
+            if (frameId == null || frameId != 6) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "Frame sin GPS: " + frameId));
             }
 
             // Extraer coordenadas de locations
@@ -245,10 +231,13 @@ public class NadadorposicionControler {
             // Usar tu service existente con upsert
             int resultado = service.upsertNadador(nadadorPosicion);
 
+            // Setear emergency=false usando tu endpoint existente
+            service.updEmergency(deviceId, false);
+
             System.out.println("Resultado upsert: " + resultado);
             System.out.println("========================");
 
-            // INSERTAR EN HISTÓRICO
+            // 2. INSERTAR EN HISTÓRICO
             String dateKey = deviceId + "_" + LocalDate.now().toString();
             UUID recorridoId = UUID.nameUUIDFromBytes(dateKey.getBytes());
 
@@ -280,8 +269,7 @@ public class NadadorposicionControler {
             response.put("lat", latString);
             response.put("lng", lngString);
             response.put("bearing", bearing);
-            response.put("emergency", emergency != null ? emergency : false);
-            response.put("frame_id", frameId);
+            response.put("emergency", false);
 
             return ResponseEntity.ok(response);
 
