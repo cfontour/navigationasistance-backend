@@ -3,6 +3,7 @@ package com.navigationasistance.controler;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -213,8 +214,12 @@ public class NadadorposicionControler {
             NadadorHistoricoRutas historico = new NadadorHistoricoRutas();
             historico.setUsuarioid(deviceId);
             historico.setRecorridoid(recorridoId);
-            historico.setNadadorfecha(LocalDate.now());
-            historico.setNadadorhora(Timestamp.from(Instant.now()));
+            ZoneId uruguayZone = ZoneId.of("America/Montevideo");
+            LocalDate fechaUruguay = LocalDate.now(uruguayZone);
+            Timestamp horaUruguay = Timestamp.from(Instant.now().atZone(uruguayZone).toInstant());
+
+            historico.setNadadorfecha(fechaUruguay);
+            historico.setNadadorhora(horaUruguay);
             historico.setSecuencia(1); // Por ahora fijo en 1, después refinamos
             historico.setNadadorlat(latString);
             historico.setNadadorlng(lngString);
