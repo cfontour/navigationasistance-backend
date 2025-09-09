@@ -173,8 +173,34 @@ public class NadadorposicionControler {
                 return ResponseEntity.ok(Map.of("success", true, "message", "Sin decoded_payload"));
             }
 
-            // Verificar que sea frame GPS (frame_id = 6)
+            // Extraer device ID
+            Map<String, Object> endDeviceIds = (Map<String, Object>) ttnPayload.get("end_device_ids");
+            String deviceId = (String) endDeviceIds.get("device_id");
+
+            // EXTRAER CAMPOS
             Integer frameId = (Integer) decodedPayload.get("frame_id");
+            Integer bearing = (Integer) decodedPayload.get("bearing");
+            Boolean emergency = (Boolean) decodedPayload.get("emergency");
+
+            // SI HAY EMERGENCIA, procesar SIEMPRE (con o sin GPS)
+            if (emergency != null && emergency) {
+                NadadorPosicion emergencyUpdate = new NadadorPosicion();
+                emergencyUpdate.setUsuarioid(deviceId);
+                emergencyUpdate.setEmergency(true);
+
+                int resultadoEmergency = service.updEmergency(deviceId, true);
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", true);
+                response.put("message", "EMERGENCIA PROCESADA");
+                response.put("emergency", true);
+                response.put("deviceId", deviceId);
+                response.put("resultado", resultadoEmergency);
+
+                return ResponseEntity.ok(response);
+            }
+
+            // Si NO hay emergencia, solo procesar si hay GPS
             if (frameId == null || frameId != 6) {
                 return ResponseEntity.ok(Map.of("success", true, "message", "Frame sin GPS: " + frameId));
             }
@@ -199,22 +225,13 @@ public class NadadorposicionControler {
             String latString = String.valueOf(latitude);
             String lngString = String.valueOf(longitude);
 
-            // Extraer device ID
-            Map<String, Object> endDeviceIds = (Map<String, Object>) ttnPayload.get("end_device_ids");
-            String deviceId = (String) endDeviceIds.get("device_id");
-
-            // EXTRAER NUEVOS CAMPOS
-            Integer bearing = (Integer) decodedPayload.get("bearing");
-            Boolean emergency = (Boolean) decodedPayload.get("emergency");
-
             // Crear NadadorPosicion usando tu estructura
             NadadorPosicion nadadorPosicion = new NadadorPosicion();
-            nadadorPosicion.setUsuarioid(deviceId); // device_id como usuarioid
-            nadadorPosicion.setNadadorlat(latString);  // String
-            nadadorPosicion.setNadadorlng(lngString);  // String
+            nadadorPosicion.setUsuarioid(deviceId);
+            nadadorPosicion.setNadadorlat(latString);
+            nadadorPosicion.setNadadorlng(lngString);
             nadadorPosicion.setBearing(bearing);
             nadadorPosicion.setEmergency(emergency);
-            // nadadorPosicion.setFechaUltimaActualizacion se setea automáticamente
 
             // Usar tu service existente con upsert
             int resultado = service.upsertNadador(nadadorPosicion);
@@ -222,30 +239,25 @@ public class NadadorposicionControler {
             System.out.println("Resultado upsert: " + resultado);
             System.out.println("========================");
 
-            // 2. INSERTAR EN HISTÓRICO (siguiendo tu lógica del /agregar)
-            // UUID por día
+            // 2. INSERTAR EN HISTÓRICO
             String dateKey = deviceId + "_" + LocalDate.now().toString();
             UUID recorridoId = UUID.nameUUIDFromBytes(dateKey.getBytes());
 
-            // Crear entrada histórico igual que tu /agregar
             NadadorHistoricoRutas historico = new NadadorHistoricoRutas();
             historico.setUsuarioid(deviceId);
             historico.setRecorridoid(recorridoId);
 
             ZoneId uruguayZone = ZoneId.of("America/Montevideo");
             ZonedDateTime nowUruguay = ZonedDateTime.now(uruguayZone);
-
             LocalDate fechaUruguay = nowUruguay.toLocalDate();
             Timestamp horaUruguay = Timestamp.valueOf(nowUruguay.toLocalDateTime());
 
             historico.setNadadorfecha(fechaUruguay);
             historico.setNadadorhora(horaUruguay);
-
-            historico.setSecuencia(1); // Por ahora fijo en 1, después refinamos
+            historico.setSecuencia(1);
             historico.setNadadorlat(latString);
             historico.setNadadorlng(lngString);
 
-            // Usar exactamente el mismo service que tu /agregar
             int resultadoHistorico = historicoService.insertarRuta(historico);
 
             System.out.println("Resultado histórico: " + resultadoHistorico);
@@ -266,7 +278,6 @@ public class NadadorposicionControler {
         } catch (Exception e) {
             System.err.println("Error procesando webhook TTN: " + e.getMessage());
             e.printStackTrace();
-            // IMPORTANTE: Siempre devolver 200 a TTN
             return ResponseEntity.ok(Map.of("success", false, "error", e.getMessage()));
         }
     }
