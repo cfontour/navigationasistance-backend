@@ -193,11 +193,17 @@ public class NadadorposicionControler {
             Map<String, Object> endDeviceIds = (Map<String, Object>) ttnPayload.get("end_device_ids");
             String deviceId = (String) endDeviceIds.get("device_id");
 
+            // EXTRAER NUEVOS CAMPOS
+            Integer bearing = (Integer) decodedPayload.get("bearing");
+            Boolean emergency = (Boolean) decodedPayload.get("emergency");
+
             // Crear NadadorPosicion usando tu estructura
             NadadorPosicion nadadorPosicion = new NadadorPosicion();
             nadadorPosicion.setUsuarioid(deviceId); // device_id como usuarioid
             nadadorPosicion.setNadadorlat(latString);  // String
             nadadorPosicion.setNadadorlng(lngString);  // String
+            nadadorPosicion.setBearing(bearing);
+            nadadorPosicion.setEmergency(emergency);
             // nadadorPosicion.setFechaUltimaActualizacion se setea automáticamente
 
             // Usar tu service existente con upsert
@@ -241,7 +247,9 @@ public class NadadorposicionControler {
                     "resultado", resultado,
                     "deviceId", deviceId,
                     "lat", latString,
-                    "lng", lngString
+                    "lng", lngString,
+                    "bearing", bearing,
+                    "emergency", emergency
             ));
 
         } catch (Exception e) {
