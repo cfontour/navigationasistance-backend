@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -214,12 +215,16 @@ public class NadadorposicionControler {
             NadadorHistoricoRutas historico = new NadadorHistoricoRutas();
             historico.setUsuarioid(deviceId);
             historico.setRecorridoid(recorridoId);
+
             ZoneId uruguayZone = ZoneId.of("America/Montevideo");
-            LocalDate fechaUruguay = LocalDate.now(uruguayZone);
-            Timestamp horaUruguay = Timestamp.from(Instant.now().atZone(uruguayZone).toInstant());
+            ZonedDateTime nowUruguay = ZonedDateTime.now(uruguayZone);
+
+            LocalDate fechaUruguay = nowUruguay.toLocalDate();
+            Timestamp horaUruguay = Timestamp.valueOf(nowUruguay.toLocalDateTime());
 
             historico.setNadadorfecha(fechaUruguay);
             historico.setNadadorhora(horaUruguay);
+
             historico.setSecuencia(1); // Por ahora fijo en 1, después refinamos
             historico.setNadadorlat(latString);
             historico.setNadadorlng(lngString);
