@@ -184,10 +184,6 @@ public class NadadorposicionControler {
 
             // SI HAY EMERGENCIA, procesar SIEMPRE (con o sin GPS)
             if (emergency != null && emergency) {
-                NadadorPosicion emergencyUpdate = new NadadorPosicion();
-                emergencyUpdate.setUsuarioid(deviceId);
-                emergencyUpdate.setEmergency(true);
-
                 int resultadoEmergency = service.updEmergency(deviceId, true);
 
                 Map<String, Object> response = new HashMap<>();
@@ -231,10 +227,12 @@ public class NadadorposicionControler {
             nadadorPosicion.setNadadorlat(latString);
             nadadorPosicion.setNadadorlng(lngString);
             nadadorPosicion.setBearing(bearing);
-            nadadorPosicion.setEmergency(emergency);
 
             // Usar tu service existente con upsert
             int resultado = service.upsertNadador(nadadorPosicion);
+
+            // Setear emergency=false usando tu endpoint existente
+            service.updEmergency(deviceId, false);
 
             System.out.println("Resultado upsert: " + resultado);
             System.out.println("========================");
@@ -271,7 +269,7 @@ public class NadadorposicionControler {
             response.put("lat", latString);
             response.put("lng", lngString);
             response.put("bearing", bearing);
-            response.put("emergency", emergency);
+            response.put("emergency", false);
 
             return ResponseEntity.ok(response);
 
