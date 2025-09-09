@@ -1,8 +1,14 @@
 package com.navigationasistance.controler;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import com.navigationasistance.modelo.NadadorHistoricoRutas;
+import com.navigationasistance.service.NadadorhistoricoRutasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +24,9 @@ public class NadadorposicionControler {
 
     @Autowired
     NadadorposicionService service;
+
+    @Autowired
+    private NadadorhistoricoRutasService historicoService;
 
     @GetMapping("/listar")
     public ResponseEntity<List<NadadorPosicion>> listar() {
@@ -193,6 +202,27 @@ public class NadadorposicionControler {
             int resultado = service.upsertNadador(nadadorPosicion);
 
             System.out.println("Resultado upsert: " + resultado);
+            System.out.println("========================");
+
+            // 2. INSERTAR EN HISTÓRICO (siguiendo tu lógica del /agregar)
+            // UUID por día
+            String dateKey = deviceId + "_" + LocalDate.now().toString();
+            UUID recorridoId = UUID.nameUUIDFromBytes(dateKey.getBytes());
+
+            // Crear entrada histórico igual que tu /agregar
+            NadadorHistoricoRutas historico = new NadadorHistoricoRutas();
+            historico.setUsuarioid(deviceId);
+            historico.setRecorridoid(recorridoId);
+            historico.setNadadorfecha(LocalDate.now());
+            historico.setNadadorhora(Timestamp.from(Instant.now()));
+            historico.setSecuencia(1); // Por ahora fijo en 1, después refinamos
+            historico.setNadadorlat(latString);
+            historico.setNadadorlng(lngString);
+
+            // Usar exactamente el mismo service que tu /agregar
+            int resultadoHistorico = historicoService.insertarRuta(historico);
+
+            System.out.println("Resultado histórico: " + resultadoHistorico);
             System.out.println("========================");
 
             return ResponseEntity.ok(Map.of(
