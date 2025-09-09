@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import com.navigationasistance.modelo.NadadorPosicion;
 import com.navigationasistance.service.NadadorposicionService;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping(path = "/nadadorposicion", produces = MediaType.APPLICATION_JSON_VALUE)
 public class NadadorposicionControler {
@@ -249,16 +251,17 @@ public class NadadorposicionControler {
             System.out.println("Resultado histórico: " + resultadoHistorico);
             System.out.println("========================");
 
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Posición procesada",
-                    "resultado", resultado,
-                    "deviceId", deviceId,
-                    "lat", latString,
-                    "lng", lngString,
-                    "bearing", bearing,
-                    "emergency", emergency
-            ));
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Posición procesada");
+            response.put("resultado", resultado);
+            response.put("deviceId", deviceId);
+            response.put("lat", latString);
+            response.put("lng", lngString);
+            response.put("bearing", bearing);
+            response.put("emergency", emergency);
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             System.err.println("Error procesando webhook TTN: " + e.getMessage());
