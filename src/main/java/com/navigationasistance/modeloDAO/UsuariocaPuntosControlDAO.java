@@ -85,4 +85,10 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
         return template.query(sql, new Object[]{rutaId}, new UsuariocaPuntosControlRowMapper());
     }
 
+    @Override
+    public int deleteUsuarioRutasPuntos(String nadadorruta_id) {
+        String sql="delete from usuarioca_puntoscontrol where nadadorruta_id =?";
+        return template.update(sql, nadadorruta_id);
+    }
+
 }

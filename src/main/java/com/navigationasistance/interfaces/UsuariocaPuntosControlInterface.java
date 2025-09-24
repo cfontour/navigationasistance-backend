@@ -15,4 +15,6 @@ public interface UsuariocaPuntosControlInterface {
     List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer rutaId,String nadadorrutaId);
 
     List<UsuariocaPuntosControl> listarPorRutaId(Integer rutaId);
+
+    int deleteUsuarioRutasPuntos(String nadadorruta_Id);
 }

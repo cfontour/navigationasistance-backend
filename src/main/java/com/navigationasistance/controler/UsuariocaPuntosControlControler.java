@@ -47,4 +47,9 @@ public class UsuariocaPuntosControlControler {
         return service.listarPorRutaId(rutaId);
     }
 
+    @DeleteMapping("/eliminarUsuariocaPuntos/{nadadorruta_d}")
+    public int eliminarUsuariocaPuntos(@PathVariable("nadadorruta_id") String nadadorruta_id) {
+        return service.deleteUsuarioRutasPuntos(nadadorruta_id);
+    }
+
 }
