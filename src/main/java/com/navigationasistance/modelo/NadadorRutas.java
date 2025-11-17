@@ -16,6 +16,9 @@ public class NadadorRutas {
     @Column(name = "ruta_id", nullable = false)
     private Integer rutaId;
 
+    @Column(name = "grupoid", nullable = true)
+    private String grupoid;
+
     // Getters y Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -25,4 +28,12 @@ public class NadadorRutas {
 
     public Integer getRutaId() { return rutaId; }
     public void setRutaId(Integer rutaId) { this.rutaId = rutaId; }
+
+    public String getGrupoid() {
+        return grupoid;
+    }
+
+    public void setGrupoid(String grupoid) {
+        this.grupoid = grupoid;
+    }
 }

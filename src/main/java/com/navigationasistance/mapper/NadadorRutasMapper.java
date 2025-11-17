@@ -12,6 +12,7 @@ public class NadadorRutasMapper {
         dao.setId(nr.getId());
         dao.setUsuarioId(nr.getUsuarioId());
         dao.setRutaId(nr.getRutaId());  // Usamos getRutaId() y no getRuta()
+        dao.setGrupoid(nr.getGrupoid());
         return dao;
     }
 
@@ -20,6 +21,7 @@ public class NadadorRutasMapper {
         nr.setId(dao.getId());
         nr.setUsuarioId(dao.getUsuarioId());
         nr.setRutaId(dao.getRutaId());  // Usamos setRutaId(...) y no setRuta(...)
+        nr.setGrupoid(dao.getGrupoid());
         return nr;
     }
 }

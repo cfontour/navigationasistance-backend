@@ -28,6 +28,11 @@ public class NadadorRutasService {
         return interfaceDAO.findAll();
     }
 
+    // ✅ NUEVO: listar por grupo
+    public List<NadadorRutas> listarGrupo(String grupoid) {
+        return interfaceDAO.findByGrupoid(grupoid);
+    }
+
     public NadadorRutas findById(Integer id) {
         return interfaceDAO.findById(id).orElse(null);
     }
@@ -58,6 +63,18 @@ public class NadadorRutasService {
             return 1;
         }
         return 0;
+    }
+
+    // 🔁 AHORA BORRA POR GRUPOID (no por id)
+    public int delNadadorRutaGrupo(String grupoid) {
+        // traigo todos los registros del grupo
+        var lista = interfaceDAO.findByGrupoid(grupoid);
+        if (lista == null || lista.isEmpty()) {
+            return 0;
+        }
+
+        interfaceDAO.deleteAll(lista);
+        return lista.size(); // cantidad de filas borradas
     }
 
     public List<NadadorRutasDAO> getPorRuta(Integer rutaId) {

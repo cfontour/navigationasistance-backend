@@ -5,6 +5,7 @@ public class NadadorRutasDAO {
     private Integer id;
     private Integer rutaId;
     private String usuarioId;
+    private String grupoid;
 
     // Getters y Setters
 
@@ -30,5 +31,13 @@ public class NadadorRutasDAO {
 
     public void setUsuarioId(String usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public String getGrupoid() {
+        return grupoid;
+    }
+
+    public void setGrupoid(String grupoid) {
+        this.grupoid = grupoid;
     }
 }

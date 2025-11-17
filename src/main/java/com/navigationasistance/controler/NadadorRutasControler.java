@@ -20,6 +20,12 @@ public class NadadorRutasControler {
         return service.listar();
     }
 
+    // ✅ Endpoint /nadadorrutas/listarGrupo/{grupoId}
+    @GetMapping("/listarGrupo/{grupoId}")
+    public List<NadadorRutas> listarGrupo(@PathVariable("grupoId") String grupoId) {
+        return service.listarGrupo(grupoId);
+    }
+
     @GetMapping("/buscar/{id}")
     public NadadorRutas buscarPorId(@PathVariable Integer id) {
         return service.findById(id);
@@ -45,4 +51,11 @@ public class NadadorRutasControler {
     public void eliminar(@PathVariable Integer id) {
         service.delNadadorRuta(id);
     }
+
+    // ✅ elimina TODO lo que pertenezca al grupo indicado
+    @DeleteMapping("/eliminarGrupo/{grupoId}")
+    public int eliminar(@PathVariable("grupoId") String grupoId) {
+        return service.delNadadorRutaGrupo(grupoId);
+    }
+
 }

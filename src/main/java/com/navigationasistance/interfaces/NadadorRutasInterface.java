@@ -13,4 +13,8 @@ public interface NadadorRutasInterface extends JpaRepository<NadadorRutas, Integ
     Optional<NadadorRutas> findByUsuarioId(String usuarioId);
 
     List<NadadorRutas> findByRutaId(Integer rutaId);
+
+    // ✅ nombre del método alineado con el atributo "grupoid"
+    List<NadadorRutas> findByGrupoid(String grupoid);
+
 }
