@@ -21,8 +21,8 @@ public class UsuarioService implements UsuarioInterface {
 	}
 
 	@Override
-	public List<Usuario> listarGrupo() {
-		return dao.listar();
+	public List<Usuario> listarGrupo(String grupo) {
+		return dao.listarGrupo(grupo);
 	}
 
 	@Override

@@ -23,9 +23,9 @@ public class UsuarioDAO implements UsuarioInterface {
 	}
 
 	@Override
-	public List<Usuario> listarGrupo() {
+	public List<Usuario> listarGrupo(String grupo) {
 		String sql = "SELECT * FROM usuario WHERE grupoid = ?";
-		List<Usuario> list = template.query(sql, new UsuarioRowMapper());
+		List<Usuario> list = template.query(sql, new UsuarioRowMapper(), grupo);
 		return list;
 	}
 

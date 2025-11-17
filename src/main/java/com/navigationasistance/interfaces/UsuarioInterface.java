@@ -7,7 +7,7 @@ import java.util.List;
 public interface UsuarioInterface {
 	List<Usuario> listar();
 
-	List<Usuario> listarGrupo();
+	List<Usuario> listarGrupo(String grupo);
 
 	Usuario listarId(String id);
 

@@ -29,6 +29,16 @@ public class UsuarioControler {
 		}
 	}
 
+	@GetMapping("/listarGrupo/{grupoId}")
+	public ResponseEntity<List<Usuario>> listarGrupo(@PathVariable String grupoId) {
+		try {
+			List<Usuario> lista = service.listarGrupo(grupoId);
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/listar/{idSolicitante}")
 	public ResponseEntity<?> listarConRol(@PathVariable String idSolicitante) {
 		Usuario solicitante = service.listarId(idSolicitante);
