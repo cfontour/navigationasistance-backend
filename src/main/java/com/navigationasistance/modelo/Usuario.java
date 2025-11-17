@@ -21,6 +21,8 @@ public class Usuario {
 	private String rol;
 	@Column
 	private String telefono;
+	@Column
+	private String grupoid;
 
 	public Usuario() {
 		// TODO Auto-generated constructor stub
@@ -65,7 +67,7 @@ public class Usuario {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	public String getRol() {
 		return rol;
 	}
@@ -81,4 +83,13 @@ public class Usuario {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+
+	public String getGrupoid() {
+		return grupoid;
+	}
+
+	public void setGrupoid(String grupoid) {
+		this.grupoid = grupoid;
+	}
+
 }

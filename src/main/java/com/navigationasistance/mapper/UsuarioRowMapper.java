@@ -17,6 +17,7 @@ public class UsuarioRowMapper implements RowMapper<Usuario> {
         usuario.setPassword(rs.getString("password"));
         usuario.setRol(rs.getString("rol"));
         usuario.setTelefono(rs.getString("telefono"));
+        usuario.setGrupoid(rs.getString("grupoid"));
         // Asegúrate de establecer todos los campos de Usuario aquí
         return usuario;
     }

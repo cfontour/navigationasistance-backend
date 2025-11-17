@@ -21,6 +21,11 @@ public class UsuarioService implements UsuarioInterface {
 	}
 
 	@Override
+	public List<Usuario> listarGrupo() {
+		return dao.listar();
+	}
+
+	@Override
 	public Usuario listarId(String id) {
 		return dao.listarId(id);
 	}
