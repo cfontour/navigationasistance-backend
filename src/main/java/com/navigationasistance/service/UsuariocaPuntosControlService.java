@@ -30,6 +30,10 @@ public class UsuariocaPuntosControlService {
         return usuariocaPuntosControlDAO.listar();
     }
 
+    public List<UsuariocaPuntosControl> listarGrupo(String grupoId) {
+        return usuariocaPuntosControlDAO.listarGrupo(grupoId);
+    }
+
     public List<UsuariocaPuntosControl> listarPorNadadorrutaId(String nadadorrutaId) {
         return usuariocaPuntosControlDAO.listarPorNadadorrutaId(nadadorrutaId);
     }

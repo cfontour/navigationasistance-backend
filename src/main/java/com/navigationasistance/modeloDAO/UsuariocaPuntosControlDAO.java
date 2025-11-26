@@ -64,6 +64,12 @@ public class UsuariocaPuntosControlDAO implements UsuariocaPuntosControlInterfac
     }
 
     @Override
+    public List<UsuariocaPuntosControl> listarGrupo(String idGrupo) {
+        String sql = "SELECT up.* FROM usuarioca_puntoscontrol up, usuario u WHERE up.nadadorruta_id = u.id AND u.grupoid = ?";
+        return template.query(sql, new Object[]{String.valueOf(idGrupo)}, new UsuariocaPuntosControlRowMapper());
+    }
+
+    @Override
     public List<UsuariocaPuntosControl> listarPorNadadorrutaId(String nadadorrutaId) {
         // Este método probablemente deba cambiarse a String también:
         String sql = "SELECT * FROM usuarioca_puntoscontrol WHERE nadadorruta_id = ?";

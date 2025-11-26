@@ -10,6 +10,8 @@ public interface UsuariocaPuntosControlInterface {
 
     List<UsuariocaPuntosControl> listar();
 
+    List<UsuariocaPuntosControl> listarGrupo(String idGrupo);
+
     List<UsuariocaPuntosControl> listarPorNadadorrutaId(String nadadorrutaId);
 
     List<UsuariocaPuntosControl> listarPorRutaIdnadadorRutaId(Integer rutaId,String nadadorrutaId);

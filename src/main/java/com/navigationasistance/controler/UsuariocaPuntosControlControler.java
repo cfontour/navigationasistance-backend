@@ -30,6 +30,11 @@ public class UsuariocaPuntosControlControler {
         return service.listar();
     }
 
+    @GetMapping("/listarGrupo/{idGrupo}")
+    public List<UsuariocaPuntosControl> listarGrupo(@PathVariable("idGrupo") String idGrupo) {
+        return service.listarGrupo(idGrupo);
+    }
+
     @GetMapping("/listarPorNadadorrutaId/{id}")
     public List<UsuariocaPuntosControl> listarPorNadadorrutaId(@PathVariable("id") String id) {
         return service.listarPorNadadorrutaId(id);
