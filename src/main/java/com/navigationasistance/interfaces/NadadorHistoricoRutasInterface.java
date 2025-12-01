@@ -13,4 +13,5 @@ public interface NadadorHistoricoRutasInterface {
     List<UUID> obtenerUltimoRecorrido(String usuarioId, LocalDate fecha);
     List<NadadorHistoricoRutas> listar();
     List<NadadorHistoricoRutas> obtenerPorRecorridoId(UUID recorridoId);
+    int obtenerProximaSecuencia(String usuarioId, UUID recorridoId);
 }

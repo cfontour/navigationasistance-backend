@@ -252,7 +252,9 @@ public class NadadorposicionControler {
 
             historico.setNadadorfecha(fechaUruguay);
             historico.setNadadorhora(horaUruguay);
-            historico.setSecuencia(1);
+            // 🔥 NUEVO: obtener secuencia real
+            int secuencia = historicoService.obtenerProximaSecuencia(deviceId, recorridoId);
+            historico.setSecuencia(secuencia);
             historico.setNadadorlat(latString);
             historico.setNadadorlng(lngString);
 

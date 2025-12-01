@@ -95,4 +95,12 @@ public class NadadorHistoricoRutasDAO implements NadadorHistoricoRutasInterface 
         String sql = "SELECT * FROM nadadorhistoricorutas ORDER BY usuario_id, recorrido_id, secuencia";
         return template.query(sql, new NadadorhistoricoRutasRowMapper());
     }
+
+    @Override
+    public int obtenerProximaSecuencia(String usuarioId, UUID recorridoId) {
+        String sql = "SELECT COALESCE(MAX(secuencia), 0) + 1 " +
+                "FROM nadadorhistoricorutas " +
+                "WHERE usuario_id = ? AND recorrido_id = ?";
+        return template.queryForObject(sql, Integer.class, usuarioId, recorridoId);
+    }
 }

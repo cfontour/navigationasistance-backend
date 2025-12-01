@@ -45,4 +45,7 @@ public class NadadorhistoricoRutasService implements NadadorHistoricoRutasInterf
     public List<NadadorHistoricoRutas> obtenerPorRecorridoId(UUID recorridoId) {
         return dao.obtenerPorRecorridoId(recorridoId);
     }
+
+    @Override
+    public int obtenerProximaSecuencia(String usuarioId, UUID recorridoId) { return dao.obtenerProximaSecuencia(usuarioId, recorridoId); }
 }
