@@ -1,5 +1,6 @@
 package com.navigationasistance.controler;
 
+import com.navigationasistance.config.JwtUtil;
 import com.navigationasistance.modelo.Usuario;
 import com.navigationasistance.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -18,72 +19,65 @@ public class LoginController {
     @Autowired
     private UsuarioService service;
 
-    // 🔥 Variable GLOBAL para invalidar todas las sesiones de una vez
-    private static volatile String SESSION_VERSION = UUID.randomUUID().toString();
+    @Autowired
+    private JwtUtil jwtUtil;
 
+    // 🔐 LOGIN - Devuelve JWT
     @GetMapping("/login/{id}/{password}")
-    public ResponseEntity<Usuario> login(
+    public ResponseEntity<?> login(
             @PathVariable String id,
-            @PathVariable String password,
-            HttpSession session) {
+            @PathVariable String password) {
 
         try {
             Usuario usuario = service.login(id, password);
 
             if (usuario != null) {
+                // Generar JWT
+                String token = jwtUtil.generateToken(usuario.getId());
 
-                // Guardamos datos de sesión
-                session.setAttribute("usuarioLogueado", usuario.getId());
+                // Devolver token al frontend
+                Map<String, Object> response = new HashMap<>();
+                response.put("token", token);
+                response.put("usuario", usuario.getId());
 
-                // 🆕 Guardamos la versión global actual dentro de la sesión
-                session.setAttribute("sessionVersion", SESSION_VERSION);
-
-                return new ResponseEntity<>(usuario, HttpStatus.OK);
-
+                return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // 🟦 CHEQUEO DE SESIÓN
+    // ✅ VERIFICAR TOKEN
     @GetMapping("/sesion/estado")
-    public ResponseEntity<Void> estadoSesion(HttpSession session) {
+    public ResponseEntity<?> estadoSesion(@RequestHeader(value = "Authorization", required = false) String authHeader) {
 
-        // usuario dentro de la sesión
-        Object usuario = session.getAttribute("usuarioLogueado");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
-        // versión guardada cuando se creó la sesión
-        String versionSesion = (String) session.getAttribute("sessionVersion");
+        String token = authHeader.substring(7); // Extraer token sin "Bearer "
 
-        // versión global actual
-        String versionGlobal = SESSION_VERSION;
-
-        // reglas de validación
-        if (usuario != null && versionSesion != null && versionSesion.equals(versionGlobal)) {
-            return new ResponseEntity<>(HttpStatus.OK); // sesión válida
+        if (jwtUtil.isTokenValid(token)) {
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // sesión inválida o expirada globalmente
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
-    // 🟥 LOGOUT individual
+    // 🚪 LOGOUT
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpSession session) {
-        session.invalidate();
+    public ResponseEntity<Void> logout() {
+        // Con JWT, el logout es simplemente descartar el token en el frontend
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 🟥 LOGOUT GLOBAL → invalida TODAS las sesiones existentes
+    // 🚪 LOGOUT GLOBAL (opcional - si necesitas invalidar todos los tokens)
     @PostMapping("/logoutGlobal")
     public ResponseEntity<Void> logoutGlobal() {
-
-        // Cambiar esta versión invalida todas las sesiones existentes automáticamente
-        SESSION_VERSION = UUID.randomUUID().toString();
-
+        // Con JWT stateless, no hay "logout global" fácil
+        // El frontend simplemente descarta todos los tokens almacenados
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
