@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LoginController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class LoginController {
     private JwtUtil jwtUtil;
 
     // 🔐 LOGIN - Devuelve JWT
-    @GetMapping("/login/{id}/{password}")
+    @GetMapping("/{id}/{password}")
     public ResponseEntity<?> login(
             @PathVariable String id,
             @PathVariable String password) {
