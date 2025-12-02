@@ -32,14 +32,10 @@ public class LoginController {
             Usuario usuario = service.login(id, password);
 
             if (usuario != null) {
-                // Generar JWT
                 String token = jwtUtil.generateToken(usuario.getId());
-
-                // Devolver token al frontend
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
                 response.put("usuario", usuario.getId());
-
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
