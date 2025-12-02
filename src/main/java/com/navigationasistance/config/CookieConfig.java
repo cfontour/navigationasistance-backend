@@ -8,12 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class CookieConfig {
 
     @Bean
-    public CookieSameSiteSupplier applicationCookieSameSiteSupplier() {
-        return CookieSameSiteSupplier.ofStrict().whenHasName("ignore"); // no afecta nada
-    }
-
-    @Bean
-    public CookieSameSiteSupplier jsessionCookieSameSiteSupplier() {
+    public CookieSameSiteSupplier jsessionIdSameSiteSupplier() {
         return CookieSameSiteSupplier.ofNone().whenHasName("JSESSIONID");
     }
 }
