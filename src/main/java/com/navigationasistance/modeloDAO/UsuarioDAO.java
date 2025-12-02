@@ -4,6 +4,7 @@ import com.navigationasistance.interfaces.UsuarioInterface;
 import com.navigationasistance.mapper.UsuarioRowMapper;
 import com.navigationasistance.modelo.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -65,6 +66,21 @@ public class UsuarioDAO implements UsuarioInterface {
 	public int delUsuario(String id) {
 		String sql="delete from usuario where id=?";
 		return template.update(sql,id);
+	}
+
+	@Override
+	public Usuario login(String id, String password) {
+		String sql = "SELECT * FROM usuario WHERE id = ? AND password = ?";
+		try {
+			return template.queryForObject(
+					sql,
+					new Object[]{id, password},
+					new UsuarioRowMapper()
+			);
+		} catch (EmptyResultDataAccessException e) {
+			// No hay coincidencia usuario+password
+			return null;
+		}
 	}
 
 }

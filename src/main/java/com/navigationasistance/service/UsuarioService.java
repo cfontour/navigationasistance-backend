@@ -49,4 +49,10 @@ public class UsuarioService implements UsuarioInterface {
 
 	@Override
 	public int delUsuario(String id) { return dao.delUsuario(id); }
+
+	@Override
+	public Usuario login(String id, String password) {
+		return dao.login(id, password);
+	}
+
 }

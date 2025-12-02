@@ -20,4 +20,6 @@ public interface UsuarioInterface {
 	int cambiarPassword(Usuario u);
 
 	int delUsuario(String id);
+
+	Usuario login(String id, String password);
 }

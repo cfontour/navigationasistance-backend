@@ -118,4 +118,28 @@ public class UsuarioControler {
 		return "Registro Eliminado!";
 	}
 
+	@GetMapping("/login/{id}/{password}")
+	public ResponseEntity<Usuario> login(
+			@PathVariable String id,
+			@PathVariable String password) {
+
+		try {
+			Usuario usuario = service.listarId(id);
+
+			if (usuario == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND); // usuario inexistente
+			}
+
+			// Comparación directa para la solución rápida
+			if (usuario.getPassword() != null && usuario.getPassword().equals(password)) {
+				return new ResponseEntity<>(usuario, HttpStatus.OK); // login correcto
+			} else {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN); // contraseña incorrecta
+			}
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }
