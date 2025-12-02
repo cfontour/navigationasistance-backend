@@ -34,8 +34,8 @@ public class LoginController {
             if (usuario != null) {
                 String token = jwtUtil.generateToken(usuario.getId());
                 Map<String, Object> response = new HashMap<>();
-                response.put("token", token);
-                response.put("usuario", usuario.getId());
+                response.put("token ", token);
+                response.put("usuario ", usuario.getId());
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
