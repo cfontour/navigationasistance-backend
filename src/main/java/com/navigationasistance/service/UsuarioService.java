@@ -55,4 +55,9 @@ public class UsuarioService implements UsuarioInterface {
 		return dao.login(id, password);
 	}
 
+	@Override
+	public int actualizarGrupo(String usuarioId, String nuevoGrupo) {
+		return dao.actualizarGrupo(usuarioId, nuevoGrupo);
+	}
+
 }

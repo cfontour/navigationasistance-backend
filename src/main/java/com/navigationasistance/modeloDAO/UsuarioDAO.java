@@ -43,6 +43,11 @@ public class UsuarioDAO implements UsuarioInterface {
 		return template.queryForObject(sql, new Object[]{email}, new UsuarioRowMapper());
 	}
 
+	@Override
+	public int actualizarGrupo(String usuarioId, String nuevoGrupo) {
+		String sql = "UPDATE usuario SET grupoid = ? WHERE id = ?";
+		return template.update(sql, nuevoGrupo, usuarioId);
+	}
 
 	@Override
 	public int addUsuario(Usuario u) {

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -139,6 +140,23 @@ public class UsuarioControler {
 
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/usuarios/{id}/grupo")
+	public ResponseEntity<?> actualizarGrupo(
+			@PathVariable String id,
+			@RequestBody Map<String, String> body) {
+
+		String nuevoGrupo = body.get("grupoid");
+
+		int result = service.actualizarGrupo(id, nuevoGrupo);
+
+		if (result == 1) {
+			return ResponseEntity.ok("Grupo actualizado correctamente");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("Usuario no encontrado");
 		}
 	}
 

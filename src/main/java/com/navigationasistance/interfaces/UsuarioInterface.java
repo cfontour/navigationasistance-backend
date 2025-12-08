@@ -21,5 +21,7 @@ public interface UsuarioInterface {
 
 	int delUsuario(String id);
 
+	int actualizarGrupo(String usuarioId, String nuevoGrupo);
+
 	Usuario login(String id, String password);
 }
