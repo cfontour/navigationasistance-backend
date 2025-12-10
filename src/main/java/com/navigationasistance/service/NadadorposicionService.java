@@ -27,6 +27,9 @@ public class NadadorposicionService implements NadadorposicionInterface {
         return dao.listarVinculadosANadadorRutas();
     }
 
+    @Override
+    public List<NadadorPosicion> listarVinculadosAGrupo(String grupoId) { return dao.listarVinculadosAGrupo(grupoId); }
+
     public int upsertNadador(NadadorPosicion n) {
         return dao.upsertNadador(n); // llama al método en el DAO (interface + implementación)
     }

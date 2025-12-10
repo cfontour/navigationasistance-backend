@@ -44,6 +44,13 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
     }
 
     @Override
+    public List<NadadorPosicion> listarVinculadosAGrupo(String grupoId) {
+        String sql = "SELECT np.* FROM nadadorposicion np " +
+                "JOIN usuario u ON np.usuario_id = u.id AND u.grupoid = ?";
+        return template.query(sql, new NadadorposicionRowMapper());
+    }
+
+    @Override
     public int upsertNadador(NadadorPosicion n) {
         String sql = "INSERT INTO nadadorposicion (usuario_id, nadadorlat, nadadorlng, bearing) " +
                 "VALUES (?, ?, ?, ?) " +

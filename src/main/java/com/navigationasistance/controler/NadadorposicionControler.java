@@ -61,6 +61,20 @@ public class NadadorposicionControler {
         return service.listarVinculadosANadadorRutas();
     }
 
+    @GetMapping("/listarActivosPorGrupo/{grupoId}")
+    public ResponseEntity<NadadorPosicion> listarVinculadosAGrupo(@PathVariable String grupoId) {
+        try {
+            NadadorPosicion nadadorPosicion = service.getNadadorPosicion(grupoId);
+            if (nadadorPosicion != null) {
+                return new ResponseEntity<>(nadadorPosicion, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/agregar")
     public ResponseEntity<NadadorPosicion> upsert(@RequestBody NadadorPosicion n) {
         System.out.println("=== DEBUG CONTROLLER ===");
