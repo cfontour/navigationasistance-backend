@@ -287,4 +287,28 @@ public class NadadorposicionControler {
         }
     }
 
+    @GetMapping("/calcularVelocidad/{usuarioId}/{recorridoId}")
+    public ResponseEntity<Double> calcularVelocidad(@PathVariable String usuarioId, @PathVariable UUID recorridoId) {
+        try {
+            Double velocidad = service.calcularVelocidad(usuarioId, recorridoId);
+            if (velocidad != null) {
+                return new ResponseEntity<>(velocidad, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/nadadoresCercanos/{usuarioId}/{latitud}/{longitud}/{distanciaMetros}")
+    public ResponseEntity<List<NadadorPosicion>> nadadoresCercanos(@PathVariable String usuarioId, @PathVariable String latitud, @PathVariable String longitud, @PathVariable Double distanciaMetros) {
+        try {
+            List<NadadorPosicion> nadadores = service.nadadoresCercanos(usuarioId, latitud, longitud, distanciaMetros);
+            return new ResponseEntity<>(nadadores, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
