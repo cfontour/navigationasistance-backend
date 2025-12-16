@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class NadadorposicionService implements NadadorposicionInterface {
@@ -57,6 +58,16 @@ public class NadadorposicionService implements NadadorposicionInterface {
     @Override
     public int delNadador(String id) {
         return dao.delNadador(id);
+    }
+
+    @Override
+    public Double calcularVelocidad(String usuarioId, UUID recorridoId) {
+        return dao.calcularVelocidad(usuarioId, recorridoId);
+    }
+
+    @Override
+    public List<NadadorPosicion> nadadoresCercanos(String usuarioId, String latitud, String longitud, Double distanciaMetros) {
+        return dao.nadadoresCercanos(usuarioId, latitud, longitud, distanciaMetros);
     }
 
 }
