@@ -86,16 +86,16 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
     @Override
     public Double calcularVelocidad(String usuarioId, UUID recorridoId) {
         String sql = "SELECT " +
-                "ST_Distance(ST_Point(h2.nadadorlng::float, h2.nadadorlat::float), " +
-                "ST_Point(h1.nadadorlng::float, h1.nadadorlat::float)) / " +
-                "EXTRACT(EPOCH FROM (h1.nadadorhora - h2.nadadorhora)) * 3.6 as velocidad_kmh " +
+                "(ST_Distance(ST_Point(h1.nadadorlng::float, h1.nadadorlat::float), " +
+                "ST_Point(h2.nadadorlng::float, h2.nadadorlat::float)) / " +
+                "EXTRACT(EPOCH FROM (h1.nadadorhora - h2.nadadorhora))) * 3.6 as velocidad_kmh " +
                 "FROM nadadorhistoricorutas h1 " +
                 "JOIN nadadorhistoricorutas h2 ON h1.usuario_id = h2.usuario_id " +
                 "AND h1.recorrido_id = h2.recorrido_id AND h1.secuencia = h2.secuencia + 1 " +
                 "WHERE h1.usuario_id = ? AND h1.recorrido_id = ? " +
                 "ORDER BY h1.secuencia DESC LIMIT 1";
 
-        return template.queryForObject(sql, new Object[]{usuarioId, recorridoId}, Double.class);
+        return template.queryForObject(sql, new Object[]{usuarioId, recorridoId.toString()}, Double.class);
     }
 
     @Override
