@@ -95,7 +95,7 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
                 "WHERE h1.usuario_id = ? AND h1.recorrido_id = ? " +
                 "ORDER BY h1.secuencia DESC LIMIT 1";
 
-        return template.queryForObject(sql, new Object[]{usuarioId, recorridoId.toString()}, Double.class);
+        return template.queryForObject(sql, new Object[]{usuarioId, recorridoId}, Double.class);
     }
 
     @Override
