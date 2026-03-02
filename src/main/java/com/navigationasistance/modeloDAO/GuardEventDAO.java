@@ -6,6 +6,7 @@ import com.navigationasistance.modelo.GuardEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.List;
 
@@ -25,7 +26,11 @@ public class GuardEventDAO implements GuardEventInterface {
     @Override
     public GuardEvent listarId(Integer id) {
         String sql = "SELECT * FROM guard_event WHERE id = ?";
-        return template.queryForObject(sql, new Object[]{id}, new GuardEventRowMapper());
+        try {
+            return template.queryForObject(sql, new Object[]{id}, new GuardEventRowMapper());
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
