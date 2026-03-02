@@ -24,25 +24,25 @@ public class GuardEventDAO implements GuardEventInterface {
 
     @Override
     public GuardEvent listarId(Integer id) {
-        String sql = "SELECT * FROM guardEvent WHERE id = ?";
+        String sql = "SELECT * FROM guard_event WHERE id = ?";
         return template.queryForObject(sql, new Object[]{id}, new GuardEventRowMapper());
     }
 
     @Override
     public int addGuardEvent(GuardEvent g) {
-        String sql = "insert into guardEvent(id, usuario_id, localidad_id, type_id, event_descripcion, event_image, event_datetime)values(?,?,?,?,?,?,?)";
+        String sql = "insert into guard_event(usuario_id, localidad_id, type_id, event_descripcion, event_image, event_datetime)values(?,?,?,?,?,?)";
         return template.update(sql, g.getId(), g.getUsuario_id(), g.getLocalidad_id(), g.getType_id(), g.getEvent_descripcion(), g.getEvent_image(), g.getEvent_datetime());
     }
 
     @Override
     public int updGuardEvent(GuardEvent g) {
-        String sql="update guardEvent set usuario_id=?, localidad_id=?, type_id=?, event_descripcion=?, event_image=?, event_datetime=? where id=?";
-        return template.update(sql, g.getUsuario_id(), g.getLocalidad_id(), g.getType_id(), g.getEvent_descripcion(), g.getEvent_image(), g.getEvent_datetime());
+        String sql="update guard_event set usuario_id=?, localidad_id=?, type_id=?, event_descripcion=?, event_image=?, event_datetime=? where id=?";
+        return template.update(sql, g.getUsuario_id(), g.getLocalidad_id(), g.getType_id(), g.getEvent_descripcion(), g.getEvent_image(), g.getEvent_datetime(), g.getId());
     }
 
     @Override
     public int delGuardEvent(Integer id) {
-        String sql="delete from guardEvent where id=?";
+        String sql="delete from guard_event where id=?";
         return template.update(sql, id);
     }
 
