@@ -6,6 +6,7 @@ import com.navigationasistance.modeloDAO.LocalidadDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public class LocalidadService implements LocalidadInterface {
     public List<Localidad> listar() {return dao.listar();	}
 
     @Override
-    public Localidad listarId(Integer id) {
+    public Localidad listarId(BigDecimal id) {
         return dao.listarId(id);
     }
 
@@ -33,7 +34,7 @@ public class LocalidadService implements LocalidadInterface {
     }
 
     @Override
-    public int delLocalidad(Integer id) {
+    public int delLocalidad(BigDecimal id) {
         return dao.delLocalidad(id);
     }
 

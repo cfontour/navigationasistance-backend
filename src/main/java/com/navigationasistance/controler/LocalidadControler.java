@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class LocalidadControler {
     }
 
     @GetMapping("/listarId/{id}")
-    public ResponseEntity<Localidad> listarId(@PathVariable Integer id) {
+    public ResponseEntity<Localidad> listarId(@PathVariable BigDecimal id) {
         try {
             Localidad localidad = service.listarId(id);
             if (localidad != null) {
@@ -51,7 +52,7 @@ public class LocalidadControler {
     }
 
     @PostMapping("/actualizar/{id}")
-    public String save(@RequestBody Localidad l,@PathVariable Integer id,Model model) {
+    public String save(@RequestBody Localidad l,@PathVariable BigDecimal id,Model model) {
         l.setId(id);
         int r=service.updLocalidad(l);
         if(r==0) {
@@ -60,7 +61,7 @@ public class LocalidadControler {
         return "Se actualizó con éxito!";
     }
     @PostMapping("/eliminar/{id}")
-    public String delete(@PathVariable Integer id,Model model) {
+    public String delete(@PathVariable BigDecimal id, Model model) {
         int r=service.delLocalidad(id);
         if(r==0) {
             return "Registro No Eliminado!";

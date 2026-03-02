@@ -1,5 +1,6 @@
 package com.navigationasistance.interfaces;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.navigationasistance.modelo.TypeEvent;
@@ -7,11 +8,11 @@ import com.navigationasistance.modelo.TypeEvent;
 public interface TypeEventInterface {
     List<TypeEvent> listar();
 
-    TypeEvent listarId(Integer id);
+    TypeEvent listarId(BigDecimal id);
 
     int addTypeEvent(TypeEvent t);
 
     int updTypeEvent(TypeEvent t);
 
-    int delTypeEvent(Integer id);
+    int delTypeEvent(BigDecimal id);
 }

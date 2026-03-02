@@ -6,14 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
-@Table(name = "Localidad")
+@Table(name = "localidad")
 @Entity
 public class Localidad {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private BigDecimal id;
     @Column
     private String localidad_pais;
     @Column
@@ -23,11 +23,11 @@ public class Localidad {
         // TODO Auto-generated constructor stub
     }
 
-    public Integer getId() {
+    public BigDecimal getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(BigDecimal id) {
         this.id = id;
     }
 
@@ -46,4 +46,5 @@ public class Localidad {
     public void setLocalidad_nombre(String localidad_nombre) {
         this.localidad_nombre = localidad_nombre;
     }
+
 }

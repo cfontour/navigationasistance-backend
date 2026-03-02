@@ -10,7 +10,7 @@ public class LocalidadRowMapper implements RowMapper<Localidad> {
     @Override
     public Localidad mapRow(ResultSet rs, int rowNum) throws SQLException {
         Localidad localidad = new Localidad();
-        localidad.setId(rs.getInt("id"));
+        localidad.setId(rs.getBigDecimal("id"));
         localidad.setLocalidad_pais(rs.getString("localidad_pais"));
         localidad.setLocalidad_nombre(rs.getString("localidad_nombre"));
 

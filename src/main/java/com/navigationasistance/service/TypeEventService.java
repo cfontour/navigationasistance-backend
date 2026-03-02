@@ -6,6 +6,7 @@ import com.navigationasistance.modeloDAO.TypeEventDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public class TypeEventService implements TypeEventInterface {
     public List<TypeEvent> listar() {return dao.listar();	}
 
     @Override
-    public TypeEvent listarId(Integer id) {
+    public TypeEvent listarId(BigDecimal id) {
         return dao.listarId(id);
     }
 
@@ -33,7 +34,7 @@ public class TypeEventService implements TypeEventInterface {
     }
 
     @Override
-    public int delTypeEvent(Integer id) {
+    public int delTypeEvent(BigDecimal id) {
         return dao.delTypeEvent(id);
     }
 

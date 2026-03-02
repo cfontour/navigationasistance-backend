@@ -6,28 +6,28 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
-@Table(name = "typeEvent")
+@Table(name = "typeevent")
 @Entity
 public class TypeEvent {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private BigDecimal id;
     @Column
     private String type_nombre;
     @Column
-    private Integer type_importancia;
+    private BigDecimal type_importancia;
 
     public TypeEvent() {
         // TODO Auto-generated constructor stub
     }
 
-    public Integer getId() {
+    public BigDecimal getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(BigDecimal id) {
         this.id = id;
     }
 
@@ -39,11 +39,11 @@ public class TypeEvent {
         this.type_nombre = type_nombre;
     }
 
-    public Integer getType_importancia() {
+    public BigDecimal getType_importancia() {
         return type_importancia;
     }
 
-    public void setType_importancia(Integer type_importancia) {
+    public void setType_importancia(BigDecimal type_importancia) {
         this.type_importancia = type_importancia;
     }
 }

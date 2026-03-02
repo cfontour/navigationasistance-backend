@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -23,7 +24,7 @@ public class TypeEventDAO implements TypeEventInterface{
     }
 
     @Override
-    public TypeEvent listarId(Integer id) {
+    public TypeEvent listarId(BigDecimal id) {
         String sql = "SELECT * FROM typeEvent WHERE id = ?";
         return template.queryForObject(sql, new Object[]{id}, new TypeEventRowMapper());
     }
@@ -41,7 +42,7 @@ public class TypeEventDAO implements TypeEventInterface{
     }
 
     @Override
-    public int delTypeEvent(Integer id) {
+    public int delTypeEvent(BigDecimal id) {
         String sql="delete from typeEvent where id=?";
         return template.update(sql, id);
     }

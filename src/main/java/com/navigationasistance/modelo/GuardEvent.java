@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Table(name = "guardEvent")
+@Table(name = "guard_event")
 @Entity
 public class GuardEvent {
     @Id

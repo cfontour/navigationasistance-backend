@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -23,7 +24,7 @@ public class LocalidadDAO implements LocalidadInterface {
     }
 
     @Override
-    public Localidad listarId(Integer id) {
+    public Localidad listarId(BigDecimal id) {
         String sql = "SELECT * FROM localidad WHERE id = ?";
         return template.queryForObject(sql, new Object[]{id}, new LocalidadRowMapper());
     }
@@ -41,7 +42,7 @@ public class LocalidadDAO implements LocalidadInterface {
     }
 
     @Override
-    public int delLocalidad(Integer id) {
+    public int delLocalidad(BigDecimal id) {
         String sql="delete from localidad where id=?";
         return template.update(sql, id);
     }

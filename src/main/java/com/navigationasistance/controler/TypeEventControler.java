@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class TypeEventControler {
     }
 
     @GetMapping("/listarId/{id}")
-    public ResponseEntity<TypeEvent> listarId(@PathVariable Integer id) {
+    public ResponseEntity<TypeEvent> listarId(@PathVariable BigDecimal id) {
         try {
             TypeEvent typeEvent = service.listarId(id);
             if (typeEvent != null) {
@@ -51,7 +52,7 @@ public class TypeEventControler {
     }
 
     @PostMapping("/actualizar/{id}")
-    public String save(@RequestBody TypeEvent t, @PathVariable Integer id, Model model) {
+    public String save(@RequestBody TypeEvent t, @PathVariable BigDecimal id, Model model) {
         t.setId(id);
         int r=service.updTypeEvent(t);
         if(r==0) {
@@ -60,7 +61,7 @@ public class TypeEventControler {
         return "Se actualizó con éxito!";
     }
     @PostMapping("/eliminar/{id}")
-    public String delete(@PathVariable Integer id,Model model) {
+    public String delete(@PathVariable BigDecimal id,Model model) {
         int r=service.delTypeEvent(id);
         if(r==0) {
             return "Registro No Eliminado!";
