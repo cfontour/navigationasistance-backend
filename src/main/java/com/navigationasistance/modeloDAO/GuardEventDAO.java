@@ -17,7 +17,7 @@ public class GuardEventDAO implements GuardEventInterface {
 
     @Override
     public List<GuardEvent> listar() {
-        String sql = "SELECT * FROM guardEvent";
+        String sql = "SELECT * FROM guard_event";
         List<GuardEvent> list = template.query(sql, new GuardEventRowMapper());
         return list;
     }
