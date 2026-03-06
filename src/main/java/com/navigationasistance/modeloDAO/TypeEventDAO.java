@@ -18,32 +18,32 @@ public class TypeEventDAO implements TypeEventInterface{
 
     @Override
     public List<TypeEvent> listar() {
-        String sql = "SELECT * FROM typeEvent";
+        String sql = "SELECT * FROM typeevent";
         List<TypeEvent> list = template.query(sql, new TypeEventRowMapper());
         return list;
     }
 
     @Override
     public TypeEvent listarId(BigDecimal id) {
-        String sql = "SELECT * FROM typeEvent WHERE id = ?";
+        String sql = "SELECT * FROM typeevent WHERE id = ?";
         return template.queryForObject(sql, new Object[]{id}, new TypeEventRowMapper());
     }
 
     @Override
     public int addTypeEvent(TypeEvent t) {
-        String sql = "insert into typeEvent(id, type_nombre, type_importancia)values(?,?,?)";
+        String sql = "insert into typeevent(id, type_nombre, type_importancia)values(?,?,?)";
         return template.update(sql, t.getId(), t.getType_nombre(), t.getType_importancia());
     }
 
     @Override
     public int updTypeEvent(TypeEvent t) {
-        String sql="update typeEvent set type_nombre=?, type_importancia=? where id=?";
-        return template.update(sql, t.getType_nombre(), t.getType_nombre(), t.getId());
+        String sql="update typeevent set type_nombre=?, type_importancia=? where id=?";
+        return template.update(sql, t.getType_nombre(), t.getType_importancia(), t.getId());
     }
 
     @Override
     public int delTypeEvent(BigDecimal id) {
-        String sql="delete from typeEvent where id=?";
+        String sql="delete from typeevent where id=?";
         return template.update(sql, id);
     }
 
