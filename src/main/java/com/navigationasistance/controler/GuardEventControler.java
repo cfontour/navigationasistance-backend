@@ -4,9 +4,15 @@ import com.navigationasistance.modelo.GuardEvent;
 import com.navigationasistance.service.GuardEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.util.List;
 
@@ -39,6 +45,21 @@ public class GuardEventControler {
             }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/imagen/{filename}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String filename) {
+        try {
+            // Leer el archivo desde donde lo guardes (ej: carpeta /uploads)
+            Path imagePath = Paths.get("uploads/" + filename);
+            byte[] imageData = Files.readAllBytes(imagePath);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(imageData);
+        } catch (IOException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
