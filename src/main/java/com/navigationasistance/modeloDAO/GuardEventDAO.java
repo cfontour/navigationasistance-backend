@@ -36,7 +36,7 @@ public class GuardEventDAO implements GuardEventInterface {
     @Override
     public int addGuardEvent(GuardEvent g) {
         String sql = "insert into guard_event(usuario_id, localidad_id, type_id, event_descripcion, event_image, event_datetime)values(?,?,?,?,?,?)";
-        return template.update(sql, g.getId(), g.getUsuario_id(), g.getLocalidad_id(), g.getType_id(), g.getEvent_descripcion(), g.getEvent_image(), g.getEvent_datetime());
+        return template.update(sql, g.getUsuario_id(), g.getLocalidad_id(), g.getType_id(), g.getEvent_descripcion(), g.getEvent_image(), g.getEvent_datetime());
     }
 
     @Override
