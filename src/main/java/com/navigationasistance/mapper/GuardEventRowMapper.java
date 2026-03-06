@@ -16,6 +16,8 @@ public class GuardEventRowMapper implements RowMapper<GuardEvent> {
         guardEvent.setId((Integer) rs.getObject("id"));
         guardEvent.setUsuario_id(rs.getString("usuario_id"));
         guardEvent.setLocalidad_id(rs.getBigDecimal("localidad_id"));
+        guardEvent.setGuard_lat(rs.getString("guard_lat"));
+        guardEvent.setGuard_lng(rs.getString("guard_lng"));
         guardEvent.setType_id(rs.getBigDecimal("type_id"));
         guardEvent.setEvent_descripcion(rs.getString("event_descripcion"));
         guardEvent.setEvent_image(rs.getBytes("event_image"));

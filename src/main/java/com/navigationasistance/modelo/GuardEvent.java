@@ -24,6 +24,10 @@ public class GuardEvent {
     @Column
     private BigDecimal localidad_id;
     @Column
+    private String guard_lat;
+    @Column
+    private String guard_lng;
+    @Column
     private BigDecimal type_id;
     @Column
     private String event_descripcion;
@@ -58,6 +62,22 @@ public class GuardEvent {
 
     public void setLocalidad_id(BigDecimal localidad_id) {
         this.localidad_id = localidad_id;
+    }
+
+    public String getGuard_lat() {
+        return guard_lat;
+    }
+
+    public void setGuard_lat(String guard_lat) {
+        this.guard_lat = guard_lat;
+    }
+
+    public String getGuard_lng() {
+        return guard_lng;
+    }
+
+    public void setGuard_lng(String guard_lng) {
+        this.guard_lng = guard_lng;
     }
 
     public BigDecimal getType_id() {
