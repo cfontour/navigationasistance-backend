@@ -17,7 +17,7 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
 
     @Override
     public List<SensorMeasurement> listar() {
-        String sql = "SELECT * FROM sensor_measurement";
+        String sql = "SELECT * FROM sensor_measurement where device_id = 'geotraser-s2100-1'";
         return template.query(sql, new SensorMeasurementRowMapper());
     }
 
