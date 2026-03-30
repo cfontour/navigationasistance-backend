@@ -43,6 +43,9 @@ public class SensorMeasurement {
     @Column(name = "unit", length = 50)
     private String unit;
 
+    @Column(name = "delta_numeric", precision = 18, scale = 6)
+    private BigDecimal deltaNumeric;
+
     @Column(name = "battery", precision = 10, scale = 2)
     private BigDecimal battery;
 
@@ -162,6 +165,14 @@ public class SensorMeasurement {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public BigDecimal getDeltaNumeric() {
+        return deltaNumeric;
+    }
+
+    public void setDeltaNumeric(BigDecimal deltaNumeric) {
+        this.deltaNumeric = deltaNumeric;
     }
 
     public BigDecimal getBattery() {

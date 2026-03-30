@@ -24,6 +24,7 @@ public class SensorMeasurementRowMapper implements RowMapper<SensorMeasurement> 
         obj.setValueNumeric(rs.getBigDecimal("value_numeric"));
         obj.setValueText(rs.getString("value_text"));
         obj.setUnit(rs.getString("unit"));
+        obj.setDeltaNumeric(rs.getBigDecimal("delta_numeric"));
         obj.setBattery(rs.getBigDecimal("battery"));
         obj.setRssi(rs.getBigDecimal("rssi"));
         obj.setSnr(rs.getBigDecimal("snr"));

@@ -42,6 +42,11 @@ public class SensorMeasurementControler {
         }
     }
 
+    @GetMapping("/flujo-s2100")
+    public ResponseEntity<?> getFlujo() {
+        return ResponseEntity.ok(service.listarFlujo());
+    }
+
     @PostMapping("/agregar")
     public String add(@RequestBody SensorMeasurement obj, Model model) {
         int r = service.add(obj);
@@ -114,6 +119,7 @@ public class SensorMeasurementControler {
                 // valor numérico o texto
                 if (value instanceof Number) {
                     sm.setValueNumeric(new java.math.BigDecimal(value.toString()));
+                    sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
                 } else {
                     sm.setValueText(String.valueOf(value));
                 }

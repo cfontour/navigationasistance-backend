@@ -24,6 +24,10 @@ public class SensorMeasurementService implements SensorMeasurementInterface {
         return dao.listarClave(devEui);
     }
 
+    public List<SensorMeasurement> listarFlujo() {
+        return dao.listarFlujo();
+    }
+
     @Override
     public int add(SensorMeasurement obj) {
         return dao.add(obj);

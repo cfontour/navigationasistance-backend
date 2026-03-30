@@ -27,9 +27,14 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
         return template.queryForObject(sql, new Object[]{devEui}, new SensorMeasurementRowMapper());
     }
 
+    public List<SensorMeasurement> listarFlujo() {
+        String sql = "SELECT * FROM v_flujo_s2100 ORDER BY created_at DESC";
+        return template.query(sql, new SensorMeasurementRowMapper());
+    }
+
     @Override
     public int add(SensorMeasurement obj) {
-        String sql = "INSERT INTO sensor_measurement(received_at, device_id, dev_eui, join_eui, channel, measurement_id, measurement_name, value_numeric, value_text, unit, battery, rssi, snr, gateway_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO sensor_measurement(received_at, device_id, dev_eui, join_eui, channel, measurement_id, measurement_name, value_numeric, value_text, unit, delta_numeric, battery, rssi, snr, gateway_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         return template.update(sql,
                 obj.getReceivedAt(),
@@ -42,6 +47,7 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
                 obj.getValueNumeric(),
                 obj.getValueText(),
                 obj.getUnit(),
+                obj.getDeltaNumeric(),
                 obj.getBattery(),
                 obj.getRssi(),
                 obj.getSnr(),
@@ -51,7 +57,7 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
 
     @Override
     public int upd(SensorMeasurement obj) {
-        String sql = "UPDATE sensor_measurement SET received_at=?, device_id=?, join_eui=?, channel=?, measurement_id=?, measurement_name=?, value_numeric=?, value_text=?, unit=?, battery=?, rssi=?, snr=?, gateway_id=? WHERE dev_eui=?";
+        String sql = "UPDATE sensor_measurement SET received_at=?, device_id=?, join_eui=?, channel=?, measurement_id=?, measurement_name=?, value_numeric=?, value_text=?, unit=?, delta_numeric=?, battery=?, rssi=?, snr=?, gateway_id=? WHERE dev_eui=?";
 
         return template.update(sql,
                 obj.getReceivedAt(),
@@ -63,6 +69,7 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
                 obj.getValueNumeric(),
                 obj.getValueText(),
                 obj.getUnit(),
+                obj.getDeltaNumeric(),
                 obj.getBattery(),
                 obj.getRssi(),
                 obj.getSnr(),
