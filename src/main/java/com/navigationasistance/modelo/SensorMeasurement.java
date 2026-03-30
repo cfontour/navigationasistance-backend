@@ -3,6 +3,7 @@ package com.navigationasistance.modelo;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "sensor_measurement")
@@ -71,8 +72,12 @@ public class SensorMeasurement {
     @PrePersist
     public void prePersist() {
         if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
+            this.createdAt = LocalDateTime.now(ZoneId.of("America/Montevideo"));
         }
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -117,6 +122,10 @@ public class SensorMeasurement {
 
     public void setChannel(String channel) {
         this.channel = channel;
+    }
+
+    public void setMeasurementId(Integer measurementId) {
+        this.measurementId = measurementId;
     }
 
     public Integer getMeasurementId() {
@@ -185,6 +194,10 @@ public class SensorMeasurement {
 
     public void setGatewayId(String gatewayId) {
         this.gatewayId = gatewayId;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -28,6 +28,7 @@ public class SensorMeasurementRowMapper implements RowMapper<SensorMeasurement> 
         obj.setRssi(rs.getBigDecimal("rssi"));
         obj.setSnr(rs.getBigDecimal("snr"));
         obj.setGatewayId(rs.getString("gateway_id"));
+        obj.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 
         int measurementId = rs.getInt("measurement_id");
         if (!rs.wasNull()) {
