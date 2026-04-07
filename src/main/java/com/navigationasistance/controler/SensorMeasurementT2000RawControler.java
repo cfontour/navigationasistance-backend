@@ -8,6 +8,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
@@ -81,6 +89,9 @@ public class SensorMeasurementT2000RawControler {
                 s.setReceivedAt(Timestamp.from(Instant.parse(receivedAtObj.toString())));
             }
 
+            String latitud = null;
+            String longitud = null;
+
             Map<String, Object> uplinkMessage = (Map<String, Object>) ttnPayload.get("uplink_message");
             if (uplinkMessage != null) {
                 Object fPortObj = uplinkMessage.get("f_port");
@@ -101,6 +112,24 @@ public class SensorMeasurementT2000RawControler {
                 Object decodedPayloadObj = uplinkMessage.get("decoded_payload");
                 if (decodedPayloadObj != null) {
                     s.setDecodedPayload(decodedPayloadObj.toString());
+
+                    // Extraer lat/lon del decoded_payload
+                    Map<String, Object> decodedPayload = (Map<String, Object>) uplinkMessage.get("decoded_payload");
+                    if (decodedPayload != null) {
+                        List<List<Map<String, Object>>> messages = (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+                        if (messages != null) {
+                            for (List<Map<String, Object>> messageGroup : messages) {
+                                for (Map<String, Object> element : messageGroup) {
+                                    String measurementId = (String) element.get("measurementId");
+                                    if ("4197".equals(measurementId)) {
+                                        longitud = element.get("measurementValue").toString();
+                                    } else if ("4198".equals(measurementId)) {
+                                        latitud = element.get("measurementValue").toString();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Map<String, Object> settings = (Map<String, Object>) uplinkMessage.get("settings");
@@ -136,6 +165,11 @@ public class SensorMeasurementT2000RawControler {
 
             int resultado = service.add(s);
 
+            // Si hay coordenadas, sincronizar con NavigationAssistance
+            if (latitud != null && longitud != null && s.getDeviceId() != null) {
+                sincronizarNadadorPosicion(s.getDeviceId(), latitud, longitud);
+            }
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("resultado", resultado);
@@ -151,6 +185,31 @@ public class SensorMeasurementT2000RawControler {
             response.put("error", e.getMessage());
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    private void sincronizarNadadorPosicion(String deviceId, String latitud, String longitud) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            ObjectMapper mapper = new ObjectMapper();
+
+            Map<String, Object> body = new HashMap<>();
+            body.put("usuarioid", deviceId);
+            body.put("nadadorlat", latitud);
+            body.put("nadadorlng", longitud);
+            body.put("fechaUltimaActualizacion", null);
+
+            HttpRequest postRequest = HttpRequest.newBuilder()
+                    .uri(URI.create("https://navigationasistance-backend-1.onrender.com/nadadorposicion/agregar"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body)))
+                    .build();
+
+            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println("SincronizarNadador response: " + response.statusCode());
+
+        } catch (Exception e) {
+            System.err.println("Error sincronizando nadador posicion: " + e.getMessage());
         }
     }
 }
