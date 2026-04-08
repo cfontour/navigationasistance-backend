@@ -20,8 +20,8 @@ public class SensorMeasurementT2000RawService implements SensorMeasurementT2000R
     }
 
     @Override
-    public SensorMeasurementT2000Raw listarClave(String devEui) {
-        return dao.listarClave(devEui);
+    public SensorMeasurementT2000Raw listarClave(String deviceId) {
+        return dao.listarClave(deviceId);
     }
 
     @Override

@@ -9,7 +9,7 @@ public interface SensorMeasurementT2000RawInterface {
 
     public List<SensorMeasurementT2000Raw> listar();
 
-    SensorMeasurementT2000Raw listarClave(String devEui);
+    SensorMeasurementT2000Raw listarClave(String deviceId);
 
     public int add(SensorMeasurementT2000Raw s);
 

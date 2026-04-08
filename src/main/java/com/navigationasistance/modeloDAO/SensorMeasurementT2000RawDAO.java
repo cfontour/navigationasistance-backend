@@ -22,9 +22,9 @@ public class SensorMeasurementT2000RawDAO implements SensorMeasurementT2000RawIn
     }
 
     @Override
-    public SensorMeasurementT2000Raw listarClave(String devEui) {
-        String sql = "SELECT * FROM sensor_measurement_t2000_raw WHERE dev_eui = ? ORDER BY createdAt DESC LIMIT 1";
-        return template.queryForObject(sql, new Object[]{devEui}, new SensorMeasurementT2000RawRowMapper());
+    public SensorMeasurementT2000Raw listarClave(String deviceId) {
+        String sql = "SELECT * FROM sensor_measurement_t2000_raw WHERE device_id = ? ORDER BY created_at DESC LIMIT 1";
+        return template.queryForObject(sql, new Object[]{deviceId}, new SensorMeasurementT2000RawRowMapper());
     }
 
     @Override
