@@ -41,9 +41,9 @@ public class SensorMeasurementT2000RawControler {
     }
 
     @GetMapping("/listarClave/{devEui}")
-    public ResponseEntity<SensorMeasurement> listarClave(@PathVariable String devEui) {
+    public ResponseEntity<SensorMeasurementT2000Raw> listarClave(@PathVariable String devEui) {
         try {
-            SensorMeasurement obj = service.listarClave(devEui);
+            SensorMeasurementT2000Raw obj = service.listarClave(devEui);
             if (obj != null) {
                 return new ResponseEntity<>(obj, HttpStatus.OK);
             } else {
