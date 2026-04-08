@@ -10,6 +10,8 @@ public interface SensorMeasurementInterface {
 
     List<SensorMeasurement> listarClave(String devEui);
 
+    SensorMeasurement listarUltimoPorDevEuiYMeasurementName(String devEui, String measurementName);
+
     int add(SensorMeasurement obj);
 
     int upd(SensorMeasurement obj);

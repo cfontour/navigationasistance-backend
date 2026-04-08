@@ -47,6 +47,24 @@ public class SensorMeasurementControler {
         return ResponseEntity.ok(service.listarFlujo());
     }
 
+    @GetMapping("/listarUltimo/{devEui}/{measurementName}")
+    public ResponseEntity<SensorMeasurement> listarUltimoPorDevEuiYMeasurementName(
+            @PathVariable String devEui,
+            @PathVariable String measurementName) {
+        try {
+            SensorMeasurement obj = service.listarUltimoPorDevEuiYMeasurementName(devEui, measurementName);
+            if (obj != null) {
+                return new ResponseEntity<>(obj, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/agregar")
     public String add(@RequestBody SensorMeasurement obj, Model model) {
         int r = service.add(obj);

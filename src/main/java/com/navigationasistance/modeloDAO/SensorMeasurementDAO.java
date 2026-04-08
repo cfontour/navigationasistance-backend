@@ -33,6 +33,19 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
     }
 
     @Override
+    public SensorMeasurement listarUltimoPorDevEuiYMeasurementName(String devEui, String measurementName) {
+        String sql = "SELECT * FROM sensor_measurement " +
+                "WHERE dev_eui = ? AND measurement_name = ? " +
+                "ORDER BY created_at DESC LIMIT 1";
+
+        return template.queryForObject(
+                sql,
+                new Object[]{devEui, measurementName},
+                new SensorMeasurementRowMapper()
+        );
+    }
+
+    @Override
     public int add(SensorMeasurement obj) {
         String sql = "INSERT INTO sensor_measurement(received_at, device_id, dev_eui, join_eui, channel, measurement_id, measurement_name, value_numeric, value_text, unit, delta_numeric, battery, rssi, snr, gateway_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 

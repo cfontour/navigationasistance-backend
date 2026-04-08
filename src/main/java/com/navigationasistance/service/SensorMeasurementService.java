@@ -29,6 +29,11 @@ public class SensorMeasurementService implements SensorMeasurementInterface {
     }
 
     @Override
+    public SensorMeasurement listarUltimoPorDevEuiYMeasurementName(String devEui, String measurementName) {
+        return dao.listarUltimoPorDevEuiYMeasurementName(devEui, measurementName);
+    }
+
+    @Override
     public int add(SensorMeasurement obj) {
         return dao.add(obj);
     }
