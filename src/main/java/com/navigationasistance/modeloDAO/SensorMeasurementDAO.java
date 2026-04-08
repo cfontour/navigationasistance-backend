@@ -23,7 +23,7 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
 
     @Override
     public SensorMeasurement listarClave(String devEui) {
-        String sql = "SELECT * FROM sensor_measurement WHERE dev_eui = ? LIMIT 1";
+        String sql = "SELECT * FROM sensor_measurement WHERE dev_eui = ? LIMIT 3";
         return template.queryForObject(sql, new Object[]{devEui}, new SensorMeasurementRowMapper());
     }
 
