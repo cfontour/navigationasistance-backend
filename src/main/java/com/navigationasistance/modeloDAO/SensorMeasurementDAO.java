@@ -22,9 +22,9 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
     }
 
     @Override
-    public SensorMeasurement listarClave(String devEui) {
+    public List<SensorMeasurement> listarClave(String devEui) {
         String sql = "SELECT * FROM sensor_measurement WHERE dev_eui = ? ORDER BY created_at DESC";
-        return template.queryForObject(sql, new Object[]{devEui}, new SensorMeasurementRowMapper());
+        return template.query(sql, new Object[]{devEui}, new SensorMeasurementRowMapper());
     }
 
     public List<SensorMeasurement> listarFlujo() {

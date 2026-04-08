@@ -29,11 +29,11 @@ public class SensorMeasurementControler {
     }
 
     @GetMapping("/listarClave/{devEui}")
-    public ResponseEntity<SensorMeasurement> listarClave(@PathVariable String devEui) {
+    public ResponseEntity<List<SensorMeasurement>> listarClave(@PathVariable String devEui) {
         try {
-            SensorMeasurement obj = service.listarClave(devEui);
-            if (obj != null) {
-                return new ResponseEntity<>(obj, HttpStatus.OK);
+            List<SensorMeasurement> lista = service.listarClave(devEui);
+            if (lista != null && !lista.isEmpty()) {
+                return new ResponseEntity<>(lista, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

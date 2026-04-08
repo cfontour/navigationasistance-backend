@@ -20,7 +20,7 @@ public class SensorMeasurementService implements SensorMeasurementInterface {
     }
 
     @Override
-    public SensorMeasurement listarClave(String devEui) {
+    public List<SensorMeasurement> listarClave(String devEui) {
         return dao.listarClave(devEui);
     }
 

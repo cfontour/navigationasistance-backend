@@ -8,7 +8,7 @@ public interface SensorMeasurementInterface {
 
     List<SensorMeasurement> listar();
 
-    SensorMeasurement listarClave(String devEui);
+    List<SensorMeasurement> listarClave(String devEui);
 
     int add(SensorMeasurement obj);
 
