@@ -1,5 +1,6 @@
 package com.navigationasistance.controler;
 
+import com.navigationasistance.modelo.SensorMeasurement;
 import com.navigationasistance.modelo.SensorMeasurementT2000Raw;
 import com.navigationasistance.service.SensorMeasurementT2000RawService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,20 @@ public class SensorMeasurementT2000RawControler {
         try {
             List<SensorMeasurementT2000Raw> lista = service.listar();
             return new ResponseEntity<>(lista, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/listarClave/{devEui}")
+    public ResponseEntity<SensorMeasurement> listarClave(@PathVariable String devEui) {
+        try {
+            SensorMeasurement obj = service.listarClave(devEui);
+            if (obj != null) {
+                return new ResponseEntity<>(obj, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
