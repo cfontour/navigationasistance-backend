@@ -100,7 +100,7 @@ public class SensorMeasurementControler {
         try {
 
             System.out.println("=== DEBUG WEBHOOK TTN S2100 ===");
-            System.out.println("Payload recibido: " + ttnPayload.toString());
+            System.out.println("Payload recibido: " + ttnPayload);
 
             Map<String, Object> data = (Map<String, Object>) ttnPayload.get("data");
             if (data == null) {
@@ -112,14 +112,16 @@ public class SensorMeasurementControler {
                 return ResponseEntity.ok(Map.of("success", false, "message", "Sin end_device_ids"));
             }
 
-            String deviceId = (String) endDeviceIds.get("device_id");
-            String devEui = (String) endDeviceIds.get("dev_eui");
-            String joinEui = (String) endDeviceIds.get("join_eui");
+            String deviceId = endDeviceIds.get("device_id") != null ? endDeviceIds.get("device_id").toString() : null;
+            String devEui = endDeviceIds.get("dev_eui") != null ? endDeviceIds.get("dev_eui").toString() : null;
+            String joinEui = endDeviceIds.get("join_eui") != null ? endDeviceIds.get("join_eui").toString() : null;
 
-            // Filtro: ignorar dispositivos que no sean S2100
             if (deviceId == null || !deviceId.startsWith("geotraser-s2100")) {
                 System.out.println("Dispositivo ignorado en webhook S2100: " + deviceId);
-                return ResponseEntity.ok(Map.of("success", false, "message", "Dispositivo no es S2100: " + deviceId));
+                return ResponseEntity.ok(Map.of(
+                        "success", false,
+                        "message", "Dispositivo no es S2100: " + deviceId
+                ));
             }
 
             Map<String, Object> uplinkMessage = (Map<String, Object>) data.get("uplink_message");
@@ -132,70 +134,130 @@ public class SensorMeasurementControler {
                 return ResponseEntity.ok(Map.of("success", false, "message", "Sin decoded_payload"));
             }
 
-            // received_at
             Timestamp receivedAt = null;
             Object receivedAtObj = data.get("received_at");
             if (receivedAtObj != null) {
                 receivedAt = Timestamp.from(Instant.parse(receivedAtObj.toString()));
             }
 
-            // RSSI, SNR, gateway
             Double rssi = null;
             Double snr = null;
             String gatewayId = null;
+
             List<Map<String, Object>> rxMetadata = (List<Map<String, Object>>) uplinkMessage.get("rx_metadata");
             if (rxMetadata != null && !rxMetadata.isEmpty()) {
                 Map<String, Object> rx = rxMetadata.get(0);
-                if (rx.get("rssi") != null) rssi = ((Number) rx.get("rssi")).doubleValue();
-                if (rx.get("snr") != null) snr = ((Number) rx.get("snr")).doubleValue();
+
+                if (rx.get("rssi") != null) {
+                    rssi = ((Number) rx.get("rssi")).doubleValue();
+                }
+
+                if (rx.get("snr") != null) {
+                    snr = ((Number) rx.get("snr")).doubleValue();
+                }
+
                 Map<String, Object> gwIds = (Map<String, Object>) rx.get("gateway_ids");
-                if (gwIds != null) gatewayId = (String) gwIds.get("gateway_id");
+                if (gwIds != null && gwIds.get("gateway_id") != null) {
+                    gatewayId = gwIds.get("gateway_id").toString();
+                }
             }
 
-            // Navegar messages: es List<List<Map>>
-            List<List<Map<String, Object>>> messages = (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+            List<List<Map<String, Object>>> messages =
+                    (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+
             if (messages == null || messages.isEmpty()) {
                 return ResponseEntity.ok(Map.of("success", false, "message", "Sin messages en decoded_payload"));
             }
 
+            int totalInsertados = 0;
+            int totalIgnorados = 0;
+            int totalErrores = 0;
+
             for (List<Map<String, Object>> group : messages) {
+                if (group == null || group.isEmpty()) {
+                    continue;
+                }
+
                 for (Map<String, Object> element : group) {
+                    try {
+                        if (element == null || element.isEmpty()) {
+                            totalIgnorados++;
+                            continue;
+                        }
 
-                    Object measurementIdObj = element.get("measurementId");
-                    Object measurementValueObj = element.get("measurementValue");
-                    Object typeObj = element.get("type");
+                        Object measurementIdObj = element.get("measurementId");
+                        Object measurementValueObj = element.get("measurementValue");
+                        Object typeObj = element.get("type");
+                        Object unitObj = element.get("unit");
 
-                    if (measurementIdObj == null || measurementValueObj == null) continue;
+                        if (measurementIdObj == null || measurementValueObj == null) {
+                            System.out.println("Elemento ignorado por faltar measurementId o measurementValue: " + element);
+                            totalIgnorados++;
+                            continue;
+                        }
 
-                    SensorMeasurement sm = new SensorMeasurement();
-                    sm.setDeviceId(deviceId);
-                    sm.setDevEui(devEui);
-                    sm.setJoinEui(joinEui);
-                    sm.setReceivedAt(receivedAt != null ? receivedAt.toLocalDateTime() : null);
-                    sm.setRssi(rssi != null ? new java.math.BigDecimal(rssi.toString()) : null);
-                    sm.setSnr(snr != null ? new java.math.BigDecimal(snr.toString()) : null);
-                    sm.setGatewayId(gatewayId);
-                    sm.setChannel("default");
-                    sm.setMeasurementName(typeObj != null ? typeObj.toString() : null);
-                    sm.setValueNumeric(new java.math.BigDecimal(measurementValueObj.toString()));
-                    sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
+                        SensorMeasurement sm = new SensorMeasurement();
+                        sm.setDeviceId(deviceId);
+                        sm.setDevEui(devEui);
+                        sm.setJoinEui(joinEui);
+                        sm.setReceivedAt(receivedAt != null ? receivedAt.toLocalDateTime() : null);
+                        sm.setRssi(rssi != null ? new java.math.BigDecimal(rssi.toString()) : null);
+                        sm.setSnr(snr != null ? new java.math.BigDecimal(snr.toString()) : null);
+                        sm.setGatewayId(gatewayId);
+                        sm.setChannel("default");
+                        sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
 
-                    int r = service.add(sm);
-                    System.out.println("Insert: measurementId=" + measurementIdObj + " value=" + measurementValueObj + " → " + r);
+                        sm.setMeasurementId(Integer.valueOf(measurementIdObj.toString()));
+                        sm.setMeasurementName(typeObj != null ? typeObj.toString() : null);
+                        sm.setUnit(unitObj != null ? unitObj.toString() : null);
+
+                        String rawValue = measurementValueObj.toString();
+                        try {
+                            sm.setValueNumeric(new java.math.BigDecimal(rawValue));
+                            sm.setValueText(null);
+                        } catch (NumberFormatException ex) {
+                            sm.setValueNumeric(null);
+                            sm.setValueText(rawValue);
+                        }
+
+                        int r = service.add(sm);
+                        totalInsertados += r;
+
+                        System.out.println(
+                                "Insert: measurementId=" + measurementIdObj +
+                                        ", measurementName=" + sm.getMeasurementName() +
+                                        ", value=" + rawValue +
+                                        ", resultado=" + r
+                        );
+
+                    } catch (Exception exElemento) {
+                        totalErrores++;
+                        System.err.println("Error procesando elemento de messages: " + element);
+                        exElemento.printStackTrace();
+                    }
                 }
             }
 
-            System.out.println("===============================");
+            System.out.println("=== RESUMEN WEBHOOK S2100 ===");
+            System.out.println("deviceId: " + deviceId);
+            System.out.println("insertados: " + totalInsertados);
+            System.out.println("ignorados: " + totalIgnorados);
+            System.out.println("errores: " + totalErrores);
+            System.out.println("=============================");
 
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Webhook S2100 procesado",
-                    "deviceId", deviceId
+                    "deviceId", deviceId,
+                    "insertados", totalInsertados,
+                    "ignorados", totalIgnorados,
+                    "errores", totalErrores
             ));
 
         } catch (Exception e) {
             System.err.println("Error procesando webhook TTN S2100: " + e.getMessage());
             e.printStackTrace();
+
             return ResponseEntity.ok(Map.of(
                     "success", false,
                     "error", e.getMessage()
