@@ -107,6 +107,15 @@ public class SensorMeasurementT2000RawControler {
                 s.setDevAddr((String) endDeviceIds.get("dev_addr"));
             }
 
+            // Filtro: ignorar dispositivos que no sean T2000
+            if (s.getDeviceId() == null || !s.getDeviceId().startsWith("geotraser-t2")) {
+                System.out.println("Dispositivo ignorado en webhook T2000: " + s.getDeviceId());
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("message", "Dispositivo no es T2000: " + s.getDeviceId());
+                return ResponseEntity.ok(response);
+            }
+
             Object receivedAtObj = data.get("received_at");
             if (receivedAtObj != null) {
                 s.setReceivedAt(Timestamp.from(Instant.parse(receivedAtObj.toString())));

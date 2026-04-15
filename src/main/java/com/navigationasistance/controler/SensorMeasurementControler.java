@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +107,21 @@ public class SensorMeasurementControler {
                 return ResponseEntity.ok(Map.of("success", false, "message", "Sin data"));
             }
 
+            Map<String, Object> endDeviceIds = (Map<String, Object>) data.get("end_device_ids");
+            if (endDeviceIds == null) {
+                return ResponseEntity.ok(Map.of("success", false, "message", "Sin end_device_ids"));
+            }
+
+            String deviceId = (String) endDeviceIds.get("device_id");
+            String devEui = (String) endDeviceIds.get("dev_eui");
+            String joinEui = (String) endDeviceIds.get("join_eui");
+
+            // Filtro: ignorar dispositivos que no sean S2100
+            if (deviceId == null || !deviceId.startsWith("geotraser-s2100")) {
+                System.out.println("Dispositivo ignorado en webhook S2100: " + deviceId);
+                return ResponseEntity.ok(Map.of("success", false, "message", "Dispositivo no es S2100: " + deviceId));
+            }
+
             Map<String, Object> uplinkMessage = (Map<String, Object>) data.get("uplink_message");
             if (uplinkMessage == null) {
                 return ResponseEntity.ok(Map.of("success", false, "message", "Sin uplink_message"));
@@ -115,58 +132,57 @@ public class SensorMeasurementControler {
                 return ResponseEntity.ok(Map.of("success", false, "message", "Sin decoded_payload"));
             }
 
-            Map<String, Object> endDeviceIds = (Map<String, Object>) data.get("end_device_ids");
-            if (endDeviceIds == null) {
-                return ResponseEntity.ok(Map.of("success", false, "message", "Sin end_device_ids"));
+            // received_at
+            Timestamp receivedAt = null;
+            Object receivedAtObj = data.get("received_at");
+            if (receivedAtObj != null) {
+                receivedAt = Timestamp.from(Instant.parse(receivedAtObj.toString()));
             }
 
-            String deviceId = (String) endDeviceIds.get("device_id");
-            String devEui = (String) endDeviceIds.get("dev_eui");
-            String joinEui = (String) endDeviceIds.get("join_eui");
-
-            Integer fPort = null;
-            Object fPortObj = uplinkMessage.get("f_port");
-            if (fPortObj != null) {
-                fPort = ((Number) fPortObj).intValue();
+            // RSSI, SNR, gateway
+            Double rssi = null;
+            Double snr = null;
+            String gatewayId = null;
+            List<Map<String, Object>> rxMetadata = (List<Map<String, Object>>) uplinkMessage.get("rx_metadata");
+            if (rxMetadata != null && !rxMetadata.isEmpty()) {
+                Map<String, Object> rx = rxMetadata.get(0);
+                if (rx.get("rssi") != null) rssi = ((Number) rx.get("rssi")).doubleValue();
+                if (rx.get("snr") != null) snr = ((Number) rx.get("snr")).doubleValue();
+                Map<String, Object> gwIds = (Map<String, Object>) rx.get("gateway_ids");
+                if (gwIds != null) gatewayId = (String) gwIds.get("gateway_id");
             }
 
-            System.out.println("Device: " + deviceId);
-            System.out.println("fPort: " + fPort);
-            System.out.println("Decoded payload: " + decodedPayload);
+            // Navegar messages: es List<List<Map>>
+            List<List<Map<String, Object>>> messages = (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+            if (messages == null || messages.isEmpty()) {
+                return ResponseEntity.ok(Map.of("success", false, "message", "Sin messages en decoded_payload"));
+            }
 
-            // ITERAR dinámicamente el payload
-            for (Map.Entry<String, Object> entry : decodedPayload.entrySet()) {
+            for (List<Map<String, Object>> group : messages) {
+                for (Map<String, Object> element : group) {
 
-                String key = entry.getKey();
-                Object value = entry.getValue();
+                    Object measurementIdObj = element.get("measurementId");
+                    Object measurementValueObj = element.get("measurementValue");
+                    Object typeObj = element.get("type");
 
-                SensorMeasurement sm = new SensorMeasurement();
+                    if (measurementIdObj == null || measurementValueObj == null) continue;
 
-                sm.setDeviceId(deviceId);
-                sm.setDevEui(devEui);
-                sm.setJoinEui(joinEui);
-                sm.setMeasurementName(key);
-                sm.setChannel("default");
-
-                // valor numérico o texto
-                if (value instanceof Number) {
-                    sm.setValueNumeric(new java.math.BigDecimal(value.toString()));
+                    SensorMeasurement sm = new SensorMeasurement();
+                    sm.setDeviceId(deviceId);
+                    sm.setDevEui(devEui);
+                    sm.setJoinEui(joinEui);
+                    sm.setReceivedAt(receivedAt != null ? receivedAt.toLocalDateTime() : null);
+                    sm.setRssi(rssi != null ? new java.math.BigDecimal(rssi.toString()) : null);
+                    sm.setSnr(snr != null ? new java.math.BigDecimal(snr.toString()) : null);
+                    sm.setGatewayId(gatewayId);
+                    sm.setChannel("default");
+                    sm.setMeasurementName(typeObj != null ? typeObj.toString() : null);
+                    sm.setValueNumeric(new java.math.BigDecimal(measurementValueObj.toString()));
                     sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
-                } else {
-                    sm.setValueText(String.valueOf(value));
+
+                    int r = service.add(sm);
+                    System.out.println("Insert: measurementId=" + measurementIdObj + " value=" + measurementValueObj + " → " + r);
                 }
-
-                // extras si existen
-                if ("battery".equalsIgnoreCase(key)) {
-                    if (value instanceof Number) {
-                        sm.setBattery(new java.math.BigDecimal(value.toString()));
-                    }
-                }
-
-                // insertar
-                int r = service.add(sm);
-
-                System.out.println("Insert measurement: " + key + " = " + value + " → " + r);
             }
 
             System.out.println("===============================");
@@ -180,7 +196,6 @@ public class SensorMeasurementControler {
         } catch (Exception e) {
             System.err.println("Error procesando webhook TTN S2100: " + e.getMessage());
             e.printStackTrace();
-
             return ResponseEntity.ok(Map.of(
                     "success", false,
                     "error", e.getMessage()
