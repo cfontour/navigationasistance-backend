@@ -91,7 +91,15 @@ public class SensorMeasurementT2000RawControler {
         try {
             SensorMeasurementT2000Raw s = new SensorMeasurementT2000Raw();
 
-            Map<String, Object> endDeviceIds = (Map<String, Object>) ttnPayload.get("end_device_ids");
+            Map<String, Object> data = (Map<String, Object>) ttnPayload.get("data");
+            if (data == null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("error", "Sin nodo data");
+                return ResponseEntity.ok(response);
+            }
+
+            Map<String, Object> endDeviceIds = (Map<String, Object>) data.get("end_device_ids");
             if (endDeviceIds != null) {
                 s.setDeviceId((String) endDeviceIds.get("device_id"));
                 s.setDevEui((String) endDeviceIds.get("dev_eui"));
@@ -99,7 +107,7 @@ public class SensorMeasurementT2000RawControler {
                 s.setDevAddr((String) endDeviceIds.get("dev_addr"));
             }
 
-            Object receivedAtObj = ttnPayload.get("received_at");
+            Object receivedAtObj = data.get("received_at");
             if (receivedAtObj != null) {
                 s.setReceivedAt(Timestamp.from(Instant.parse(receivedAtObj.toString())));
             }
@@ -107,7 +115,7 @@ public class SensorMeasurementT2000RawControler {
             String latitud = null;
             String longitud = null;
 
-            Map<String, Object> uplinkMessage = (Map<String, Object>) ttnPayload.get("uplink_message");
+            Map<String, Object> uplinkMessage = (Map<String, Object>) data.get("uplink_message");
             if (uplinkMessage != null) {
                 Object fPortObj = uplinkMessage.get("f_port");
                 if (fPortObj != null) {
@@ -128,18 +136,20 @@ public class SensorMeasurementT2000RawControler {
                 if (decodedPayloadObj != null) {
                     s.setDecodedPayload(decodedPayloadObj.toString());
 
-                    // Extraer lat/lon del decoded_payload
-                    Map<String, Object> decodedPayload = (Map<String, Object>) uplinkMessage.get("decoded_payload");
-                    if (decodedPayload != null) {
-                        List<List<Map<String, Object>>> messages = (List<List<Map<String, Object>>>) decodedPayload.get("messages");
-                        if (messages != null) {
-                            for (List<Map<String, Object>> messageGroup : messages) {
-                                for (Map<String, Object> element : messageGroup) {
-                                    String measurementId = (String) element.get("measurementId");
+                    Map<String, Object> decodedPayload = (Map<String, Object>) decodedPayloadObj;
+                    List<List<Map<String, Object>>> messages = (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+                    if (messages != null) {
+                        for (List<Map<String, Object>> messageGroup : messages) {
+                            for (Map<String, Object> element : messageGroup) {
+                                Object measurementIdObj = element.get("measurementId");
+                                String measurementId = measurementIdObj != null ? measurementIdObj.toString() : null;
+
+                                Object measurementValueObj = element.get("measurementValue");
+                                if (measurementId != null && measurementValueObj != null) {
                                     if ("4197".equals(measurementId)) {
-                                        longitud = element.get("measurementValue").toString();
+                                        longitud = measurementValueObj.toString();
                                     } else if ("4198".equals(measurementId)) {
-                                        latitud = element.get("measurementValue").toString();
+                                        latitud = measurementValueObj.toString();
                                     }
                                 }
                             }

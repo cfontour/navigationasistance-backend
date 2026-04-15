@@ -100,27 +100,41 @@ public class SensorMeasurementControler {
             System.out.println("=== DEBUG WEBHOOK TTN S2100 ===");
             System.out.println("Payload recibido: " + ttnPayload.toString());
 
-            Map<String, Object> uplinkMessage = (Map<String, Object>) ttnPayload.get("uplink_message");
+            Map<String, Object> data = (Map<String, Object>) ttnPayload.get("data");
+            if (data == null) {
+                return ResponseEntity.ok(Map.of("success", false, "message", "Sin data"));
+            }
+
+            Map<String, Object> uplinkMessage = (Map<String, Object>) data.get("uplink_message");
             if (uplinkMessage == null) {
-                return ResponseEntity.ok(Map.of("success", true, "message", "Sin uplink_message"));
+                return ResponseEntity.ok(Map.of("success", false, "message", "Sin uplink_message"));
             }
 
             Map<String, Object> decodedPayload = (Map<String, Object>) uplinkMessage.get("decoded_payload");
             if (decodedPayload == null) {
-                return ResponseEntity.ok(Map.of("success", true, "message", "Sin decoded_payload"));
+                return ResponseEntity.ok(Map.of("success", false, "message", "Sin decoded_payload"));
             }
 
-            Map<String, Object> endDeviceIds = (Map<String, Object>) ttnPayload.get("end_device_ids");
+            Map<String, Object> endDeviceIds = (Map<String, Object>) data.get("end_device_ids");
+            if (endDeviceIds == null) {
+                return ResponseEntity.ok(Map.of("success", false, "message", "Sin end_device_ids"));
+            }
+
             String deviceId = (String) endDeviceIds.get("device_id");
             String devEui = (String) endDeviceIds.get("dev_eui");
             String joinEui = (String) endDeviceIds.get("join_eui");
 
-            Integer fPort = (Integer) uplinkMessage.get("f_port");
+            Integer fPort = null;
+            Object fPortObj = uplinkMessage.get("f_port");
+            if (fPortObj != null) {
+                fPort = ((Number) fPortObj).intValue();
+            }
 
             System.out.println("Device: " + deviceId);
+            System.out.println("fPort: " + fPort);
             System.out.println("Decoded payload: " + decodedPayload);
 
-            // 🔥 ITERAR dinámicamente el payload
+            // ITERAR dinámicamente el payload
             for (Map.Entry<String, Object> entry : decodedPayload.entrySet()) {
 
                 String key = entry.getKey();
