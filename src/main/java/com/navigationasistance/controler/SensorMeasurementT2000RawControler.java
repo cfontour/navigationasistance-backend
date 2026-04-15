@@ -91,23 +91,22 @@ public class SensorMeasurementT2000RawControler {
         try {
             SensorMeasurementT2000Raw s = new SensorMeasurementT2000Raw();
 
+            System.out.println("=== DEBUG WEBHOOK TTN T2000 ===");
+            System.out.println("Payload recibido: " + ttnPayload);
+
             Map<String, Object> data = (Map<String, Object>) ttnPayload.get("data");
             if (data == null) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("success", false);
-                response.put("error", "Sin nodo data");
-                return ResponseEntity.ok(response);
+                data = ttnPayload;
             }
 
             Map<String, Object> endDeviceIds = (Map<String, Object>) data.get("end_device_ids");
             if (endDeviceIds != null) {
-                s.setDeviceId((String) endDeviceIds.get("device_id"));
-                s.setDevEui((String) endDeviceIds.get("dev_eui"));
-                s.setJoinEui((String) endDeviceIds.get("join_eui"));
-                s.setDevAddr((String) endDeviceIds.get("dev_addr"));
+                s.setDeviceId(endDeviceIds.get("device_id") != null ? endDeviceIds.get("device_id").toString() : null);
+                s.setDevEui(endDeviceIds.get("dev_eui") != null ? endDeviceIds.get("dev_eui").toString() : null);
+                s.setJoinEui(endDeviceIds.get("join_eui") != null ? endDeviceIds.get("join_eui").toString() : null);
+                s.setDevAddr(endDeviceIds.get("dev_addr") != null ? endDeviceIds.get("dev_addr").toString() : null);
             }
 
-            // Filtro: ignorar dispositivos que no sean T2000
             if (s.getDeviceId() == null || !s.getDeviceId().startsWith("geotraser-t2")) {
                 System.out.println("Dispositivo ignorado en webhook T2000: " + s.getDeviceId());
                 Map<String, Object> response = new HashMap<>();
@@ -146,14 +145,21 @@ public class SensorMeasurementT2000RawControler {
                     s.setDecodedPayload(decodedPayloadObj.toString());
 
                     Map<String, Object> decodedPayload = (Map<String, Object>) decodedPayloadObj;
-                    List<List<Map<String, Object>>> messages = (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+                    List<List<Map<String, Object>>> messages =
+                            (List<List<Map<String, Object>>>) decodedPayload.get("messages");
+
                     if (messages != null) {
                         for (List<Map<String, Object>> messageGroup : messages) {
+                            if (messageGroup == null) continue;
+
                             for (Map<String, Object> element : messageGroup) {
+                                if (element == null) continue;
+
                                 Object measurementIdObj = element.get("measurementId");
+                                Object measurementValueObj = element.get("measurementValue");
+
                                 String measurementId = measurementIdObj != null ? measurementIdObj.toString() : null;
 
-                                Object measurementValueObj = element.get("measurementValue");
                                 if (measurementId != null && measurementValueObj != null) {
                                     if ("4197".equals(measurementId)) {
                                         longitud = measurementValueObj.toString();
@@ -189,8 +195,8 @@ public class SensorMeasurementT2000RawControler {
                     }
 
                     Map<String, Object> gatewayIds = (Map<String, Object>) firstRx.get("gateway_ids");
-                    if (gatewayIds != null) {
-                        s.setGatewayId((String) gatewayIds.get("gateway_id"));
+                    if (gatewayIds != null && gatewayIds.get("gateway_id") != null) {
+                        s.setGatewayId(gatewayIds.get("gateway_id").toString());
                     }
                 }
             }
@@ -198,16 +204,21 @@ public class SensorMeasurementT2000RawControler {
             s.setPayload(ttnPayload.toString());
 
             int resultado = service.add(s);
+            System.out.println("Insert T2000 resultado: " + resultado);
 
-            // Si hay coordenadas, sincronizar con NavigationAssistance
             if (latitud != null && longitud != null && s.getDeviceId() != null) {
+                System.out.println("Sincronizando T2000 -> Navigation: lat=" + latitud + ", lng=" + longitud);
                 sincronizarNadadorPosicion(s.getDeviceId(), latitud, longitud);
+            } else {
+                System.out.println("T2000 sin coordenadas para sincronizar. lat=" + latitud + ", lng=" + longitud);
             }
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("resultado", resultado);
             response.put("deviceId", s.getDeviceId());
+            response.put("latitud", latitud);
+            response.put("longitud", longitud);
 
             return ResponseEntity.ok(response);
 
