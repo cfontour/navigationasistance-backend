@@ -144,6 +144,12 @@ public class SensorMeasurementControler {
             Double snr = null;
             String gatewayId = null;
 
+            java.math.BigDecimal battery = null;
+            Map<String, Object> lastBatteryPercentage = (Map<String, Object>) uplinkMessage.get("last_battery_percentage");
+            if (lastBatteryPercentage != null && lastBatteryPercentage.get("value") != null) {
+                battery = new java.math.BigDecimal(lastBatteryPercentage.get("value").toString());
+            }
+
             List<Map<String, Object>> rxMetadata = (List<Map<String, Object>>) uplinkMessage.get("rx_metadata");
             if (rxMetadata != null && !rxMetadata.isEmpty()) {
                 Map<String, Object> rx = rxMetadata.get(0);
@@ -204,6 +210,7 @@ public class SensorMeasurementControler {
                         sm.setRssi(rssi != null ? new java.math.BigDecimal(rssi.toString()) : null);
                         sm.setSnr(snr != null ? new java.math.BigDecimal(snr.toString()) : null);
                         sm.setGatewayId(gatewayId);
+                        sm.setBattery(battery);
                         sm.setChannel("default");
                         sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
 
