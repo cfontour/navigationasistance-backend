@@ -170,8 +170,6 @@ public class SensorMeasurementControler {
             }
 
             int totalInsertados = 0;
-            int totalIgnorados = 0;
-            int totalErrores = 0;
 
             for (List<Map<String, Object>> group : messages) {
                 if (group == null || group.isEmpty()) {
@@ -179,79 +177,50 @@ public class SensorMeasurementControler {
                 }
 
                 for (Map<String, Object> element : group) {
-                    try {
-                        if (element == null || element.isEmpty()) {
-                            totalIgnorados++;
-                            continue;
-                        }
+                    Object measurementValueObj = element.get("measurementValue");
+                    Object typeObj = element.get("type");
 
-                        Object measurementIdObj = element.get("measurementId");
-                        Object measurementValueObj = element.get("measurementValue");
-                        Object typeObj = element.get("type");
-                        Object unitObj = element.get("unit");
-
-                        if (measurementIdObj == null || measurementValueObj == null) {
-                            System.out.println("Elemento ignorado por faltar measurementId o measurementValue: " + element);
-                            totalIgnorados++;
-                            continue;
-                        }
-
-                        SensorMeasurement sm = new SensorMeasurement();
-                        sm.setDeviceId(deviceId);
-                        sm.setDevEui(devEui);
-                        sm.setJoinEui(joinEui);
-                        sm.setReceivedAt(receivedAt != null ? receivedAt.toLocalDateTime() : null);
-                        sm.setRssi(rssi != null ? new java.math.BigDecimal(rssi.toString()) : null);
-                        sm.setSnr(snr != null ? new java.math.BigDecimal(snr.toString()) : null);
-                        sm.setGatewayId(gatewayId);
-                        sm.setChannel("default");
-                        sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
-
-                        sm.setMeasurementId(Integer.valueOf(measurementIdObj.toString()));
-                        sm.setMeasurementName(typeObj != null ? typeObj.toString() : null);
-                        sm.setUnit(unitObj != null ? unitObj.toString() : null);
-
-                        String rawValue = measurementValueObj.toString();
-                        try {
-                            sm.setValueNumeric(new java.math.BigDecimal(rawValue));
-                            sm.setValueText(null);
-                        } catch (NumberFormatException ex) {
-                            sm.setValueNumeric(null);
-                            sm.setValueText(rawValue);
-                        }
-
-                        int r = service.add(sm);
-                        totalInsertados += r;
-
-                        System.out.println(
-                                "Insert: measurementId=" + measurementIdObj +
-                                        ", measurementName=" + sm.getMeasurementName() +
-                                        ", value=" + rawValue +
-                                        ", resultado=" + r
-                        );
-
-                    } catch (Exception exElemento) {
-                        totalErrores++;
-                        System.err.println("Error procesando elemento de messages: " + element);
-                        exElemento.printStackTrace();
+                    if (measurementValueObj == null) {
+                        System.out.println("Elemento ignorado por faltar measurementValue: " + element);
+                        continue;
                     }
+
+                    SensorMeasurement sm = new SensorMeasurement();
+                    sm.setDeviceId(deviceId);
+                    sm.setDevEui(devEui);
+                    sm.setJoinEui(joinEui);
+                    sm.setReceivedAt(receivedAt != null ? receivedAt.toLocalDateTime() : null);
+                    sm.setRssi(rssi != null ? new java.math.BigDecimal(rssi.toString()) : null);
+                    sm.setSnr(snr != null ? new java.math.BigDecimal(snr.toString()) : null);
+                    sm.setGatewayId(gatewayId);
+                    sm.setChannel("default");
+                    sm.setMeasurementName(typeObj != null ? typeObj.toString() : null);
+                    sm.setDeltaNumeric(java.math.BigDecimal.ZERO);
+
+                    try {
+                        sm.setValueNumeric(new java.math.BigDecimal(measurementValueObj.toString()));
+                        sm.setValueText(null);
+                    } catch (Exception ex) {
+                        sm.setValueNumeric(null);
+                        sm.setValueText(measurementValueObj.toString());
+                    }
+
+                    int r = service.add(sm);
+                    totalInsertados += r;
+
+                    System.out.println(
+                            "Insert simple: measurementName=" + sm.getMeasurementName() +
+                                    ", value=" + measurementValueObj +
+                                    ", resultado=" + r
+                    );
                 }
             }
-
-            System.out.println("=== RESUMEN WEBHOOK S2100 ===");
-            System.out.println("deviceId: " + deviceId);
-            System.out.println("insertados: " + totalInsertados);
-            System.out.println("ignorados: " + totalIgnorados);
-            System.out.println("errores: " + totalErrores);
-            System.out.println("=============================");
 
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Webhook S2100 procesado",
                     "deviceId", deviceId,
-                    "insertados", totalInsertados,
-                    "ignorados", totalIgnorados,
-                    "errores", totalErrores
+                    "insertados", totalInsertados
             ));
 
         } catch (Exception e) {
