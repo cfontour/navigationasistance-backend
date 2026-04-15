@@ -55,7 +55,7 @@ public class SensorMeasurementDAO implements SensorMeasurementInterface {
                 obj.getDevEui(),
                 obj.getJoinEui(),
                 obj.getChannel(),
-                obj.getMeasurementCatalog() != null ? obj.getMeasurementCatalog().getMeasurementId() : null,
+                obj.getMeasurementId(),
                 obj.getMeasurementName(),
                 obj.getValueNumeric(),
                 obj.getValueText(),
