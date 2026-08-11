@@ -32,7 +32,8 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(Arrays.asList(
                 "https://navigationasistance.netlify.app",
                 "https://navigationasistance-frontend.vercel.app",
-                "https://navigationasistance.ddns.net:8083"
+                "https://navigationasistance.ddns.net:8083",
+                "https://visualizador-azimut-config-service.vercel.app/"
         ));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
