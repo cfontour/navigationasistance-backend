@@ -62,7 +62,7 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
                 "bateria = EXCLUDED.bateria, " +
                 "fecha_ultima_actualizacion = CURRENT_TIMESTAMP AT TIME ZONE 'America/Montevideo'";
 
-        return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng(), n.getBearing());
+        return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng(), n.getBearing(), n.getBateria());
     }
 
 
