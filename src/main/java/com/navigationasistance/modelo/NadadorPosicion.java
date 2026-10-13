@@ -26,6 +26,9 @@ public class NadadorPosicion {
 	@Column(name = "bearing")
 	private Integer bearing;
 
+	@Column(name = "bateria")
+	private Integer bateria;
+
 	public NadadorPosicion() {}
 
 	public String getUsuarioid() {
@@ -74,5 +77,13 @@ public class NadadorPosicion {
 
 	public void setBearing(Integer bearing) {
 		this.bearing = bearing;
+	}
+
+	public Integer getBateria() {
+		return bateria;
+	}
+
+	public void setBateria(Integer bateria) {
+		this.bateria = bateria;
 	}
 }

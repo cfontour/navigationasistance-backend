@@ -59,6 +59,7 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
                 "nadadorlat = EXCLUDED.nadadorlat, " +
                 "nadadorlng = EXCLUDED.nadadorlng, " +
                 "bearing = EXCLUDED.bearing, " +
+                "bateria = EXCLUDED.bateria, " +
                 "fecha_ultima_actualizacion = CURRENT_TIMESTAMP AT TIME ZONE 'America/Montevideo'";
 
         return template.update(sql, n.getUsuarioid(), n.getNadadorlat(), n.getNadadorlng(), n.getBearing());
@@ -67,8 +68,8 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
 
     @Override
     public int updNadador(NadadorPosicion n) {
-        String sql="UPDATE nadadorposicion SET nadadorlat=?, nadadorlng=?, bearing=? WHERE usuario_id=?";
-        return template.update(sql, n.getNadadorlat(), n.getNadadorlng(), n.getBearing(), n.getUsuarioid());
+        String sql="UPDATE nadadorposicion SET nadadorlat=?, nadadorlng=?, bearing=?, bateria=? WHERE usuario_id=?";
+        return template.update(sql, n.getNadadorlat(), n.getNadadorlng(), n.getBearing(), n.getBateria(), n.getUsuarioid());
     }
 
     @Override

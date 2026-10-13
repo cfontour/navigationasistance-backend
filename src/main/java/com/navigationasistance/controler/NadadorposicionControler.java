@@ -186,6 +186,7 @@ public class NadadorposicionControler {
             Integer frameId = (Integer) decodedPayload.get("frame_id");
             Integer bearing = (Integer) decodedPayload.get("bearing");
             Boolean emergency = (Boolean) decodedPayload.get("emergency");
+            Integer bateria = (Integer) decodedPayload.get("battery"); // NUEVO
 
             // SI HAY EMERGENCIA, procesar SIEMPRE (con o sin GPS)
             if (emergency != null && emergency) {
@@ -232,6 +233,7 @@ public class NadadorposicionControler {
             nadadorPosicion.setNadadorlat(latString);
             nadadorPosicion.setNadadorlng(lngString);
             nadadorPosicion.setBearing(bearing);
+            nadadorPosicion.setBateria(bateria); // NUEVO
 
             // Usar tu service existente con upsert
             int resultado = service.upsertNadador(nadadorPosicion);
