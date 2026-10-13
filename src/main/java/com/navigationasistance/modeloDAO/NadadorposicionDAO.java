@@ -54,7 +54,7 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
     @Override
     public int upsertNadador(NadadorPosicion n) {
         String sql = "INSERT INTO nadadorposicion (usuario_id, nadadorlat, nadadorlng, bearing) " +
-                "VALUES (?, ?, ?, ?) " +
+                "VALUES (?, ?, ?, ?, ?) " +
                 "ON CONFLICT (usuario_id) DO UPDATE SET " +
                 "nadadorlat = EXCLUDED.nadadorlat, " +
                 "nadadorlng = EXCLUDED.nadadorlng, " +
