@@ -16,6 +16,7 @@ public class NadadorposicionRowMapper implements RowMapper<NadadorPosicion> {
         nadadorPosicion.setNadadorlng(rs.getString("nadadorlng"));
         nadadorPosicion.setBearing(rs.getInt("bearing"));
         nadadorPosicion.setBateria(rs.getInt("bateria"));
+        nadadorPosicion.setRssi(rs.getInt("rssi"));
         nadadorPosicion.setEmergency(rs.getBoolean("emergency"));
 
         Timestamp ts = rs.getTimestamp("fecha_ultima_actualizacion");

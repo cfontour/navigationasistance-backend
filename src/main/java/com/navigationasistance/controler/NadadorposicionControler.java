@@ -188,6 +188,21 @@ public class NadadorposicionControler {
             Boolean emergency = (Boolean) decodedPayload.get("emergency");
             Integer bateria = (Integer) decodedPayload.get("battery"); // NUEVO
 
+            // NUEVO RSSI: mejor RSSI entre los gateways que recibieron el uplink
+            Integer rssi = null;
+            List<Map<String, Object>> rxMetadata = (List<Map<String, Object>>) uplinkMessage.get("rx_metadata");
+            if (rxMetadata != null) {
+                for (Map<String, Object> gw : rxMetadata) {
+                    Object valor = gw.get("rssi");
+                    if (valor instanceof Number) {
+                        int r = ((Number) valor).intValue();
+                        if (rssi == null || r > rssi) {
+                            rssi = r;
+                        }
+                    }
+                }
+            }
+
             // SI HAY EMERGENCIA, procesar SIEMPRE (con o sin GPS)
             if (emergency != null && emergency) {
                 int resultadoEmergency = service.updEmergency(deviceId, true);
@@ -234,6 +249,7 @@ public class NadadorposicionControler {
             nadadorPosicion.setNadadorlng(lngString);
             nadadorPosicion.setBearing(bearing);
             nadadorPosicion.setBateria(bateria); // NUEVO
+            nadadorPosicion.setRssi(rssi); // NUEVO RSSI
 
             // Usar tu service existente con upsert
             int resultado = service.upsertNadador(nadadorPosicion);

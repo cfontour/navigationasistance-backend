@@ -29,6 +29,9 @@ public class NadadorPosicion {
 	@Column(name = "bateria")
 	private Integer bateria;
 
+	@Column(name = "rssi")
+	private Integer rssi;
+
 	public NadadorPosicion() {}
 
 	public String getUsuarioid() {
@@ -85,5 +88,12 @@ public class NadadorPosicion {
 
 	public void setBateria(Integer bateria) {
 		this.bateria = bateria;
+	}
+	public Integer getRssi() {
+		return rssi;
+	}
+
+	public void setRssi(Integer rssi) {
+		this.rssi = rssi;
 	}
 }
