@@ -280,6 +280,8 @@ public class NadadorposicionControler {
             historico.setSecuencia(secuencia);
             historico.setNadadorlat(latString);
             historico.setNadadorlng(lngString);
+            historico.setBateria(bateria); // NUEVO HISTORICO
+            historico.setRssi(rssi);       // NUEVO HISTORICO
 
             int resultadoHistorico = historicoService.insertarRuta(historico);
 
@@ -294,6 +296,8 @@ public class NadadorposicionControler {
             response.put("lat", latString);
             response.put("lng", lngString);
             response.put("bearing", bearing);
+            response.put("bateria", bateria); // NUEVO HISTORICO
+            response.put("rssi", rssi);       // NUEVO HISTORICO
             response.put("emergency", false);
 
             return ResponseEntity.ok(response);

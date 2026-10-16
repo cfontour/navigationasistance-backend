@@ -22,6 +22,8 @@ public class NadadorhistoricoRutasRowMapper implements RowMapper<NadadorHistoric
         ruta.setSecuencia(rs.getInt("secuencia"));
         ruta.setNadadorlat(rs.getString("nadadorlat"));
         ruta.setNadadorlng(rs.getString("nadadorlng"));
+        ruta.setBateria(rs.getInt("bateria"));
+        ruta.setRssi(rs.getInt("rssi"));
 
         return ruta;
     }

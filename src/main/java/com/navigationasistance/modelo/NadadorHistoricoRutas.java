@@ -39,6 +39,12 @@ public class NadadorHistoricoRutas {
 	@Column(name = "nadadorlng")
 	private String nadadorlng;
 
+	@Column(name = "bateria")
+	private Integer bateria;
+
+	@Column(name = "rssi")
+	private Integer rssi;
+
 	public NadadorHistoricoRutas() {
 		// Constructor por defecto
 	}
@@ -105,5 +111,21 @@ public class NadadorHistoricoRutas {
 
 	public void setNadadorlng(String nadadorlng) {
 		this.nadadorlng = nadadorlng;
+	}
+
+	public Integer getBateria() {
+		return bateria;
+	}
+
+	public void setBateria(Integer bateria) {
+		this.bateria = bateria;
+	}
+
+	public Integer getRssi() {
+		return rssi;
+	}
+
+	public void setRssi(Integer rssi) {
+		this.rssi = rssi;
 	}
 }

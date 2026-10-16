@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -24,8 +25,8 @@ public class NadadorHistoricoRutasDAO implements NadadorHistoricoRutasInterface 
     @Override
     public int insertarRuta(NadadorHistoricoRutas r) {
         String sql = "INSERT INTO nadadorhistoricorutas " +
-                "(usuario_id, recorrido_id, nadadorfecha, nadadorhora, secuencia, nadadorlat, nadadorlng) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "(usuario_id, recorrido_id, nadadorfecha, nadadorhora, secuencia, nadadorlat, nadadorlng, bateria, rssi) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -38,6 +39,8 @@ public class NadadorHistoricoRutasDAO implements NadadorHistoricoRutasInterface 
             ps.setInt(5, r.getSecuencia());
             ps.setString(6, r.getNadadorlat());
             ps.setString(7, r.getNadadorlng());
+            ps.setObject(8, r.getBateria(), Types.INTEGER);
+            ps.setObject(9, r.getRssi(), Types.INTEGER);
             return ps;
         }, keyHolder);
 
