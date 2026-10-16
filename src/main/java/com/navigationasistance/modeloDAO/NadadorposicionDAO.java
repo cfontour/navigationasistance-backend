@@ -68,8 +68,8 @@ public class NadadorposicionDAO implements NadadorposicionInterface {
 
     @Override
     public int updNadador(NadadorPosicion n) {
-        String sql="UPDATE nadadorposicion SET nadadorlat=?, nadadorlng=?, bearing=?, bateria=? WHERE usuario_id=?";
-        return template.update(sql, n.getNadadorlat(), n.getNadadorlng(), n.getBearing(), n.getBateria(), n.getUsuarioid());
+        String sql="UPDATE nadadorposicion SET nadadorlat=?, nadadorlng=?, bearing=?, bateria=?, rssi=? WHERE usuario_id=?";
+        return template.update(sql, n.getNadadorlat(), n.getNadadorlng(), n.getBearing(), n.getBateria(), n.getRssi(), n.getUsuarioid());
     }
 
     @Override
